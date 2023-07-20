@@ -1,4 +1,7 @@
-body {
+body{  
+    font-family: lato, sans-serif;
+}
+.header{
     background-color: rgb(154, 230, 119);
 }
 nav{
@@ -10,18 +13,24 @@ nav img{
     width: 200px;
     height: 200px;
 }
+nav .fa{
+    display: none;
+}
 .nav-links{
     flex-direction: column;
     text-align: right;
 }
 .nav-links ul li{
     list-style: none;
+    padding: 15px;
 }
 .nav-links ul li a{
     color: white;
     text-decoration: none;
-    
+    margin: 0 20px;
 }
 .nav-btn{
-
+    border: 1px solid white;
+    padding: 6px;
+    background: rgb(73, 184, 112);
 }

@@ -4,34 +4,33 @@
     <meta name="viewport" content="with=device-width, intitial-scale=1.0">
     <title>PantryPlatters Recipe Finder</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
 </head>
 <body>
 <!-- logo and navigation -->
-    <nav>
-        <div class="logo">
-        <a href="./home"><img src="{{ url_for('static', filename='logo_transparent.png') }}" alt="logo"></a>
-        </div>
-        <div class="nav-links">
-            <ul>
-                <li>
-                    <div class="nav-btn">
-                    <a href="./recipe_finder">RECIPE FINDER</a>
-                    </div>
-                </li>
-                <li>
-                    <div class="nav-btn">
-                    <a href="./my_recipes">MY RECIPES</a>
-                    </div>
-                </li>
-                <li>
-                    <div class="nav-btn">
-                    <a href="./signup">SIGN IN</a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
+    <section class="header">
+        <nav>
+            <div class="logo">
+            <a href="./home"><img src="{{ url_for('static', filename='logo_transparent.png') }}" alt="logo"></a>
+            </div>
+            <div class="nav-links">
+                <ul>
+                    <li>
+                        <a href="./recipe_finder" class="nav-btn">RECIPE FINDER</a>
+                    </li>
+                    <li>
+                        <a href="./my_recipes" class="nav-btn">MY RECIPES</a>
+                    </li>
+                    <li>
+                        <a href="./signup" class="nav-btn">SIGN IN</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </section>
 <!-- where stuff in other files goes -->
     {% block content %}{% endblock %}
 
