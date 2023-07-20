@@ -6,19 +6,19 @@ SEO Tech Developer program final project created by Alysa Vega, Chinyere Amasiat
 #### Libraries to install
 * Flask-WTF
 ```
-pip install Flask-WTF
+python3 -m pip install Flask-WTF
 ```
 * Flask-SQLAlchemy
 ```
-pip install Flask-SQLAlchemy
+python3 -m pip install Flask-SQLAlchemy
 ```
 * flask-behind-proxy
 ```
-pip install flask-behind-proxy
+python3 -m pip install flask-behind-proxy
 ```
 * email_validator
 ```
-pip install email_validator
+python3 -m pip install email_validator
 ```
 
 
