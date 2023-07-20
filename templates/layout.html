@@ -2,18 +2,32 @@
 <html>
 <head>
     <meta name="viewport" content="with=device-width, intitial-scale=1.0">
-    <title>Pantry Platters Recipe Finder</title>
+    <title>PantryPlatters Recipe Finder</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-<!-- logo -->
+<!-- logo and navigation -->
     <nav>
+        <div class="logo">
         <a href="./home"><img src="{{ url_for('static', filename='logo_transparent.png') }}" alt="logo"></a>
+        </div>
         <div class="nav-links">
             <ul>
-                <li><a href="./recipe_finder">RECIPE FINDER</a></li>
-                <li><a href="./my_recipes">MY RECIPES</a></li>
-                <li><a href="./signup"></a>SIGN IN</li>
+                <li>
+                    <div class="nav-btn">
+                    <a href="./recipe_finder">RECIPE FINDER</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="nav-btn">
+                    <a href="./my_recipes">MY RECIPES</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="nav-btn">
+                    <a href="./signup">SIGN IN</a>
+                    </div>
+                </li>
             </ul>
         </div>
     </nav>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="with=device-width, intitial-scale=1.0">
+        <title>PantryPlatters Recipe Finder</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='loading.css') }}">
+    </head>
+    <body>
+        <div class="loading-container">
+          <img src="{{ url_for('static', filename='cooking-pot.gif') }}" alt="Pot Gif">
+          <div class="loading-bar" id="loading-bar"></div>
+        </div>
+    </body>
+</html>
+
+<!-- for the main file:
+@app.route('/loading')
+def loading_page():
+    return render_template('loading_page.html')
+
+@app.route('/progress')
+def progress():
+    def generate():
+        for i in range(101):
+            time.sleep(0.1)  # Simulate processing time
+            yield f"data: {i}\n\n"
+
+    return Response(generate(), content_type='text/event-stream') -->

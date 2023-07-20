@@ -1,18 +1,17 @@
 body {
-    background-color: red;
+    background-color: rgb(154, 230, 119);
 }
 nav{
     display: flex;
-    padding: 15% 6%;
+    padding: 0% 2%;
     justify-content: space-between;
-    align-items: center;
 }
 nav img{
-    width: 100px;
-    height: 100px;
+    width: 200px;
+    height: 200px;
 }
 .nav-links{
-    flex: 1;
+    flex-direction: column;
     text-align: right;
 }
 .nav-links ul li{
@@ -21,4 +20,8 @@ nav img{
 .nav-links ul li a{
     color: white;
     text-decoration: none;
+    
+}
+.nav-btn{
+
 }
