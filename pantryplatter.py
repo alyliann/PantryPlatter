@@ -47,57 +47,51 @@ def register():
         flash(f'Welcome Back!')
         return redirect(url_for('home'))
     return render_template('signup.html', title='Register', signup=signup, signin = signin)
-'''
-def parseRecipes(recipe_dict):
-    for i in recipe_dict
-'''
-    
 
+def parseIngredients(ingredients):
+    parsed_ingredients = ''
+    for item in ingredients:
+        if item:
+            parsed_ingredients += item + ',' # comma-separated ingredient list
+    parsed_ingredients = parsed_ingredients[:-1] # delete last comma
+
+    return parsed_ingredients
+
+def parseRecipes(recipes):
+    parsed_recipes = []
+    for i in range(len(recipes)):
+        parsed_recipe = {
+            'id': recipes[i]["id"],
+            'image': recipes[i]["image"],
+            'title': recipes[i]["title"],
+            'missed_ingredients': [],
+            'used_ingredients': []
+        }
+
+        for j in range(recipes[i]["missedIngredientCount"]):
+            parsed_recipe['missed_ingredients'].append(recipes[i]["missedIngredients"][j]["name"])
+
+        for j in range(recipes[i]["usedIngredientCount"]):
+            parsed_recipe['used_ingredients'].append(recipes[i]["usedIngredients"][j]["name"])
+
+        parsed_recipes.append(parsed_recipe)
+
+    return parsed_recipes
 
 @app.route("/recipe_finder", methods=['GET'])
 def recipeFinder():
     form = RecipeForm()
     if form.validate_on_submit():
         inputs = [form.in_1, form.in_2, form.in_3, form.in_4, form.in_5, form.in_6, form.in_7, form.in_8, form.in_9, form.in_10]
-        
-        ingredients = ''
-        for item in inputs:
-            if item:
-                ingredients += item + ',' # comma-separated ingredient list
-        ingredients = ingredients[:-2] # delete last comma
-
-    ingredients = 'onions,spaghetti,tomatoes,cheese,olives'
+    inputs = ["apples","bananas", None, "sugar"]
+    ingredients = parseIngredients(inputs)
     url = f'https://api.spoonacular.com/recipes/findByIngredients?ingredients={ingredients}&number=4&ranking=2&ignorePantry=false&apiKey=5ac9dabcf0c2476f8f2f8ccff61443b2'
+    
     response = requests.get(url)
-    recipes = response.json()
-
-    recipe_1 = [recipes[0]["id"],recipes[0]["image"],[], recipes[0]["title"], []]
-    for i in range(recipes[0]["missedIngredientCount"]):
-        recipe_1[2].append(recipes[0]["missedIngredients"][i]["name"])
-    for i in range(recipes[0]["usedIngredientCount"]):
-        recipe_1[4].append(recipes[0]["usedIngredients"][i]["name"])
-
-    recipe_2 = [recipes[1]["id"],recipes[1]["image"],[], recipes[1]["title"], []]
-    for i in range(recipes[1]["missedIngredientCount"]):
-        recipe_1[2].append(recipes[1]["missedIngredients"][i]["name"])
-    for i in range(recipes[1]["usedIngredientCount"]):
-        recipe_1[4].append(recipes[1]["usedIngredients"][i]["name"])
-
-    recipe_3 = [recipes[2]["id"],recipes[2]["image"],[], recipes[2]["title"], []]
-    for i in range(recipes[2]["missedIngredientCount"]):
-        recipe_1[2].append(recipes[2]["missedIngredients"][i]["name"])
-    for i in range(recipes[2]["usedIngredientCount"]):
-        recipe_1[4].append(recipes[2]["usedIngredients"][i]["name"])
-    
-    recipe_4 = [recipes[3]["id"],recipes[3]["image"],[], recipes[3]["title"], []]
-    for i in range(recipes[3]["missedIngredientCount"]):
-        recipe_1[2].append(recipes[3]["missedIngredients"][i]["name"])
-    for i in range(recipes[3]["usedIngredientCount"]):
-        recipe_1[4].append(recipes[3]["usedIngredients"][i]["name"])
-    
+    recipes = parseRecipes(response.json())
+    pprint.pprint(recipes)
 
     return render_template('recipe_finder.html', title='Recipe Finder')
-
 
 
 # @app.route("/update_server", methods=['POST'])
