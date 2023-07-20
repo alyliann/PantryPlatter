@@ -47,6 +47,12 @@ def register():
         flash(f'Welcome Back!')
         return redirect(url_for('home'))
     return render_template('signup.html', title='Register', signup=signup, signin = signin)
+'''
+def parseRecipes(recipe_dict):
+    for i in recipe_dict
+'''
+    
+
 
 @app.route("/recipe_finder", methods=['GET'])
 def recipeFinder():
@@ -61,12 +67,34 @@ def recipeFinder():
         ingredients = ingredients[:-2] # delete last comma
 
     ingredients = 'onions,spaghetti,tomatoes,cheese,olives'
-    #url = 'https://api.spoonacular.com/recipes/findByIngredients?apiKey=5ac9dabcf0c2476f8f2f8ccff61443b2'
     url = f'https://api.spoonacular.com/recipes/findByIngredients?ingredients={ingredients}&number=4&ranking=2&ignorePantry=false&apiKey=5ac9dabcf0c2476f8f2f8ccff61443b2'
     response = requests.get(url)
+    recipes = response.json()
 
-    print("Testing response: ", end='')
-    pprint.pprint(response.json())
+    recipe_1 = [recipes[0]["id"],recipes[0]["image"],[], recipes[0]["title"], []]
+    for i in range(recipes[0]["missedIngredientCount"]):
+        recipe_1[2].append(recipes[0]["missedIngredients"][i]["name"])
+    for i in range(recipes[0]["usedIngredientCount"]):
+        recipe_1[4].append(recipes[0]["usedIngredients"][i]["name"])
+
+    recipe_2 = [recipes[1]["id"],recipes[1]["image"],[], recipes[1]["title"], []]
+    for i in range(recipes[1]["missedIngredientCount"]):
+        recipe_1[2].append(recipes[1]["missedIngredients"][i]["name"])
+    for i in range(recipes[1]["usedIngredientCount"]):
+        recipe_1[4].append(recipes[1]["usedIngredients"][i]["name"])
+
+    recipe_3 = [recipes[2]["id"],recipes[2]["image"],[], recipes[2]["title"], []]
+    for i in range(recipes[2]["missedIngredientCount"]):
+        recipe_1[2].append(recipes[2]["missedIngredients"][i]["name"])
+    for i in range(recipes[2]["usedIngredientCount"]):
+        recipe_1[4].append(recipes[2]["usedIngredients"][i]["name"])
+    
+    recipe_4 = [recipes[3]["id"],recipes[3]["image"],[], recipes[3]["title"], []]
+    for i in range(recipes[3]["missedIngredientCount"]):
+        recipe_1[2].append(recipes[3]["missedIngredients"][i]["name"])
+    for i in range(recipes[3]["usedIngredientCount"]):
+        recipe_1[4].append(recipes[3]["usedIngredients"][i]["name"])
+    
 
     return render_template('recipe_finder.html', title='Recipe Finder')
 
