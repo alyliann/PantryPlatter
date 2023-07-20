@@ -1,14 +1,14 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-    <title>Pantry Platters Recipe Finder</title>
     <meta name="viewport" content="with=device-width, intitial-scale=1.0">
+    <title>Pantry Platters Recipe Finder</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-<!-- Logo -->
+<!-- logo -->
     <nav>
-        <a href="./home"><img src="../images/logo.png" alt="logo"></a>
+        <a href="./home"><img src="{{ url_for('static', filename='logo_transparent.png') }}" alt="logo"></a>
         <div class="nav-links">
             <ul>
                 <li><a href="./recipe_finder">RECIPE FINDER</a></li>
