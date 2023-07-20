@@ -16,7 +16,7 @@ pip install Flask-SQLAlchemy
 ```
 pip install flask-behind-proxy
 ```
-* flask-behind-proxy
+* email_validator
 ```
 pip install email_validator
 ```
