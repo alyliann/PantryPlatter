@@ -48,14 +48,17 @@ def register():
         return redirect(url_for('home'))
     return render_template('signup.html', title='Register', signup=signup, signin = signin)
 
+# @app.route("/recipe_finder", methods=['GET'])
+# def recipeFinder():
+#    return render_template('recipe_finder.html', title='Recipe Results')
+
 def parseIngredients(ingredients):
     parsed_ingredients = ''
     for item in ingredients:
         if item:
             parsed_ingredients += item + ',' # comma-separated ingredient list
-    parsed_ingredients = parsed_ingredients[:-1] # delete last comma
-
-    return parsed_ingredients
+    
+    return parsed_ingredients[:-1] # return parsed_ingredients without last comma
 
 def parseRecipes(recipes):
     parsed_recipes = []
@@ -76,10 +79,13 @@ def parseRecipes(recipes):
 
         parsed_recipes.append(parsed_recipe)
 
+    # global recipe_ids
+    # recipe_ids = []
+
     return parsed_recipes
 
-@app.route("/recipe_finder", methods=['GET'])
-def recipeFinder():
+@app.route("/recipe_results", methods=['GET'])
+def recipeResults():
     form = RecipeForm()
     if form.validate_on_submit():
         inputs = [form.in_1, form.in_2, form.in_3, form.in_4, form.in_5, form.in_6, form.in_7, form.in_8, form.in_9, form.in_10]
@@ -91,11 +97,7 @@ def recipeFinder():
     recipes = parseRecipes(response.json())
     pprint.pprint(recipes)
 
-    return render_template('recipe_finder.html', title='Recipe Finder')
-
-# @app.route("/recipe_results", methods=['GET'])
-# def recipeResults():
-#    return render_template('recipe_results.html', title='Recipe Results')
+    return render_template('recipe_results.html', title='Recipe Results')
 
 # @app.route("/recipe_info")
 # def recipeInfo():
