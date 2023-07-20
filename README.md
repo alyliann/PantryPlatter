@@ -4,10 +4,6 @@ SEO Tech Developer program final project created by Alysa Vega, Chinyere Amasiat
 ## Setup instructions
 
 #### Libraries to install
-* GitPython
-```
-pip install GitPython
-```
 * Flask-WTF
 ```
 pip install Flask-WTF
