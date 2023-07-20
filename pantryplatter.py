@@ -48,9 +48,9 @@ def register():
         return redirect(url_for('home'))
     return render_template('signup.html', title='Register', signup=signup, signin = signin)
 
-# @app.route("/recipe_finder", methods=['GET'])
-# def recipeFinder():
-#    return render_template('recipe_finder.html', title='Recipe Results')
+@app.route("/recipe_finder", methods=['GET'])
+def recipeFinder():
+    return render_template('recipe_finder.html', title='Recipe Results')
 
 def parseIngredients(ingredients):
     parsed_ingredients = ''
@@ -99,13 +99,13 @@ def recipeResults():
 
     return render_template('recipe_results.html', title='Recipe Results')
 
-# @app.route("/recipe_info")
-# def recipeInfo():
-#    return render_template('recipe_info.html', title='Recipe Information')
+@app.route("/recipe_info")
+def recipeInfo():
+    return render_template('recipe_info.html', title='Recipe Information')
 
-# @app.route("/my_recipes")
-# def myRecipes():
-#    return render_template('my_recipes.html', title='My Recipes')
+@app.route("/my_recipes")
+def myRecipes():
+    return render_template('my_recipes.html', title='My Recipes')
 
 # @app.route("/update_server", methods=['POST'])
 # def webhook():
