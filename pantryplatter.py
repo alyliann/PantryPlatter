@@ -79,9 +79,6 @@ def parseRecipes(recipes):
 
         parsed_recipes.append(parsed_recipe)
 
-    # global recipe_ids
-    # recipe_ids = []
-
     return parsed_recipes
 
 @app.route("/recipe_results", methods=['GET'])
@@ -97,11 +94,12 @@ def recipeResults():
     recipes = parseRecipes(response.json())
     pprint.pprint(recipes)
 
-    return render_template('recipe_results.html', title='Recipe Results')
+    return render_template('recipe_results.html', title='Recipe Results', recipes=recipes)
 
-@app.route("/recipe_info")
-def recipeInfo():
-    return render_template('recipe_info.html', title='Recipe Information')
+'''@app.route("/recipe_info/<id>", methods=['GET'])
+def recipeInfo(id):
+    
+    return render_template('recipe_info.html', title='Recipe Information')'''
 
 @app.route("/my_recipes")
 def myRecipes():
