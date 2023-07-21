@@ -4,5 +4,24 @@
 
 {% endblock %}
 {% block content %}
-    
+<div class="recipe-container">
+  {% for recipe in recipes %}
+  <div class="recipe">
+    <h2><a href="{{ url_for('recipeInfo', id=recipe.id) }}">{{ recipe.title }}</a></h2>
+    <img src="{{ recipe.image }}" alt="{{ recipe.title }}">
+    <h3>Missed Ingredients:</h3>
+    <ul>
+      {% for missed_ingredient in recipe.missed_ingredients %}
+      <li>{{ missed_ingredient }}</li>
+      {% endfor %}
+    </ul>
+    <h3>Used Ingredients:</h3>
+    <ul>
+      {% for used_ingredient in recipe.used_ingredients %}
+      <li>{{ used_ingredient }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endfor %}
+</div>
 {% endblock %}

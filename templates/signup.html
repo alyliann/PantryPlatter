@@ -7,16 +7,7 @@
 
 <!-- signup form -->
 
-<!-- class SignUpForm(FlaskForm):
-    name = StringField('Name',
-                       validators=[DataRequired(), Length(min=2, max=20)])
-    email = EmailField('Email',
-                        validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    confirm_password = PasswordField('Confirm Password',
-                                     validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField('Sign Up') -->
-
+<h1>Sign up</h1>
 <div class="content-section">
     <form method="POST" action="">
         {{ signup.hidden_tag() }}
@@ -82,13 +73,7 @@
 
 <!-- sign in form -->
 
-<!-- class SignInForm(FlaskForm):
-    email = EmailField('Email',
-                        validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
-
-    submit = SubmitField('Sign In') -->
-
+<h2>Already have an account? Sign in here</h2>
 <div class="content-section">
     <form method="POST" action="">
         {{ signin.hidden_tag() }}

@@ -5,4 +5,146 @@
 {% endblock %}
 {% block content %}
 
+<h1>Enter up to 10 ingredients</h1>
+
+<div class="content-section">
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <div class="form-group">
+                {{ form.in_1.label(class="form-control-label") }}
+                {% if form.in_1.errors %}
+                  {{ form.in_1(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                    {% for error in form.in_1.errors%}
+                        <span>{{error}}</span>
+                    {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.in_1(class="form-control form-control-lg") }}
+              {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.in_2.label(class="form-control-label") }}
+                {% if form.in_2.errors %}
+                  {{ form.in_2(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                    {% for error in form.in_2.errors%}
+                        <span>{{error}}</span>
+                    {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.in_2(class="form-control form-control-lg") }}
+              {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.in_3.label(class="form-control-label") }}
+                {% if form.in_3.errors %}
+                  {{ form.in_3(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                    {% for error in form.in_3.errors%}
+                        <span>{{error}}</span>
+                    {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.in_3(class="form-control form-control-lg") }}
+              {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.in_4.label(class="form-control-label") }}
+                {% if form.in_4.errors %}
+                  {{ form.in_4(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                    {% for error in form.in_4.errors%}
+                        <span>{{error}}</span>
+                    {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.in_4(class="form-control form-control-lg") }}
+              {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.in_5.label(class="form-control-label") }}
+                {% if form.in_5.errors %}
+                  {{ form.in_5(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                    {% for error in form.in_5.errors%}
+                        <span>{{error}}</span>
+                    {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.in_5(class="form-control form-control-lg") }}
+              {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.in_6.label(class="form-control-label") }}
+                {% if form.in_6.errors %}
+                  {{ form.in_6(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                    {% for error in form.in_6.errors%}
+                        <span>{{error}}</span>
+                    {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.in_6(class="form-control form-control-lg") }}
+              {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.in_7.label(class="form-control-label") }}
+                {% if form.in_7.errors %}
+                  {{ form.in_7(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                    {% for error in form.in_7.errors%}
+                        <span>{{error}}</span>
+                    {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.in_7(class="form-control form-control-lg") }}
+              {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.in_8.label(class="form-control-label") }}
+                {% if form.in_8.errors %}
+                  {{ form.in_8(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                    {% for error in form.in_8.errors%}
+                        <span>{{error}}</span>
+                    {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.in_8(class="form-control form-control-lg") }}
+              {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.in_9.label(class="form-control-label") }}
+                {% if form.in_9.errors %}
+                  {{ form.in_9(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                    {% for error in form.in_9.errors%}
+                        <span>{{error}}</span>
+                    {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.in_9(class="form-control form-control-lg") }}
+              {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.in_10.label(class="form-control-label") }}
+                {% if form.in_10.errors %}
+                  {{ form.in_10(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                    {% for error in form.in_10.errors%}
+                        <span>{{error}}</span>
+                    {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.in_10(class="form-control form-control-lg") }}
+              {% endif %}
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+         </div>
+    </form>
+</div>
 {% endblock %}
