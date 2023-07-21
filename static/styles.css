@@ -2,7 +2,8 @@ body{
     font-family: lato, sans-serif;
 }
 .header{
-    background-color: rgb(154, 230, 119);
+    background-color: rgb(154, 230, 119); 
+    background-image: url(../static/cooking_pattern.png);
 }
 nav{
     display: flex;
@@ -12,9 +13,8 @@ nav{
 nav img{
     width: 200px;
     height: 200px;
-}
-nav .fa{
-    display: none;
+    background-color: rgb(154, 230, 119, 0.65);
+    border-radius: 60%;
 }
 .nav-links{
     flex-direction: column;
@@ -22,15 +22,28 @@ nav .fa{
 }
 .nav-links ul li{
     list-style: none;
-    padding: 15px;
+    display: inline-block;
 }
 .nav-links ul li a{
     color: white;
     text-decoration: none;
-    margin: 0 20px;
+    margin-right: 15px;
 }
 .nav-btn{
-    border: 1px solid white;
+    border: 2px solid white;
     padding: 6px;
     background: rgb(73, 184, 112);
+}
+.row{
+    margin-top: 5%;
+    display: flex;
+    justify-content: space-between;
+}
+.home-col{
+    flex-basis: 31%;
+    background: rgb(154, 230, 119);
+    border-radius: 10px;
+    margin-bottom: 5%;
+    padding-top: 5%;
+    padding-bottom: 5%;
 }
