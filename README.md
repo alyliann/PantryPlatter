@@ -1,5 +1,5 @@
 ![workflows style status badge](https://github.com/alyliann/PantryPlatter/actions/workflows/style.yaml/badge.svg)
-# PantryPlatter
+# PantryPlatters
 SEO Tech Developer program final project created by Alysa Vega, Chinyere Amasiatu, Myah Jackson-Solomon, and Shelley Massinga.
 
 ## Setup instructions
