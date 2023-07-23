@@ -20,13 +20,13 @@ class User(db.Model):
     password = db.Column(db.String(60), nullable=False)
 
     def __repr__(self):
-        return f"User('{self.name}', '{self.email}')"
+        return f'User('{self.name}', '{self.email}')'
 
 with app.app_context():
     db.create_all()
 
-@app.route("/")
-@app.route("/home")
+@app.route('/')
+@app.route('/home')
 def home():
     if 'name' in session:
         user = User.query.filter_by(email=session['name']).first()
@@ -35,7 +35,7 @@ def home():
 
     return render_template('home.html')
 
-@app.route("/signup", methods=['GET', 'POST'])
+@app.route('/signup', methods=['GET', 'POST'])
 def register():
     signup = SignUpForm()
     signin = SignInForm()
@@ -63,7 +63,7 @@ def logout():
    session.pop('email', None)
    return redirect(url_for('home'))
 
-@app.route("/recipe_finder", methods=['GET','POST'])
+@app.route('/recipe_finder', methods=['GET','POST'])
 def recipeFinder():
     form = RecipeForm()
     global inputs
@@ -84,18 +84,18 @@ def parseRecipes(recipes):
     parsed_recipes = []
     for i in range(len(recipes)):
         parsed_recipe = {
-            'id': recipes[i]["id"],
-            'image': recipes[i]["image"],
-            'title': recipes[i]["title"],
+            'id': recipes[i]['id'],
+            'image': recipes[i]['image'],
+            'title': recipes[i]['title'],
             'missed_ingredients': [],
             'used_ingredients': []
         }
 
-        for j in range(recipes[i]["missedIngredientCount"]):
-            parsed_recipe['missed_ingredients'].append(recipes[i]["missedIngredients"][j]["name"])
+        for j in range(recipes[i]['missedIngredientCount']):
+            parsed_recipe['missed_ingredients'].append(recipes[i]['missedIngredients'][j]['name'])
 
-        for j in range(recipes[i]["usedIngredientCount"]):
-            parsed_recipe['used_ingredients'].append(recipes[i]["usedIngredients"][j]["name"])
+        for j in range(recipes[i]['usedIngredientCount']):
+            parsed_recipe['used_ingredients'].append(recipes[i]['usedIngredients'][j]['name'])
 
         parsed_recipes.append(parsed_recipe)
 
@@ -105,9 +105,9 @@ def parseRecipes(recipes):
 def loading_page():
     return render_template('loading.html')
 
-@app.route("/recipe_results", methods=['GET','POST'])
+@app.route('/recipe_results', methods=['GET','POST'])
 def recipeResults():
-    # inputs = ["apples","bananas", None, "sugar"]
+    # inputs = ['apples','bananas', None, 'sugar']
     ingredients = parseIngredients(inputs)
 
     url = f'https://api.spoonacular.com/recipes/findByIngredients?ingredients={ingredients}&number=4&ranking=2&ignorePantry=false&apiKey=5ac9dabcf0c2476f8f2f8ccff61443b2'
@@ -117,7 +117,7 @@ def recipeResults():
 
     return render_template('recipe_results.html', title='Recipe Results', recipes=recipes)
 
-@app.route("/recipe_info/<id>", methods=['GET'])
+@app.route('/recipe_info/<id>', methods=['GET'])
 def recipeInfo(id):
     specific_recipe = None
     for r in recipes:
@@ -126,11 +126,11 @@ def recipeInfo(id):
             break
     return render_template('recipe_info.html', title='Recipe Information', specific_recipe=specific_recipe)
 
-@app.route("/my_recipes")
+@app.route('/my_recipes')
 def myRecipes():
     return render_template('my_recipes.html', title='My Recipes')
 
-# @app.route("/update_server", methods=['POST'])
+# @app.route('/update_server', methods=['POST'])
 # def webhook():
 #     if request.method == 'POST':
 #         repo = git.Repo('/home/seoflaskexample/flask-hosted-example')
@@ -141,4 +141,4 @@ def myRecipes():
 #         return 'Wrong event type', 400
 
 if __name__ == '__main__':
-    app.run(debug=True, host="0.0.0.0")
+    app.run(debug=True, host='0.0.0.0')
