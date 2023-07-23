@@ -2,55 +2,75 @@ import requests
 import pprint
 from forms import SignUpForm, SignInForm, RecipeForm
 from flask_behind_proxy import FlaskBehindProxy
-from flask import Flask, render_template, url_for, flash, redirect, request
-# from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, url_for, flash, redirect, request,escape, session
+from flask_sqlalchemy import SQLAlchemy
 # import git
 
 app = Flask(__name__)
 proxied = FlaskBehindProxy(app)
 app.config['SECRET_KEY'] = '761a3091d6606b8b0ec4cdae77a5b7473060e5fdfb96840e40bb82b7b2f2cacf'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 
-# db = SQLAlchemy(app)
+db = SQLAlchemy(app)
 
-# class User(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(20), unique=True, nullable=False)
-#     email = db.Column(db.String(120), unique=True, nullable=False)
-#     password = db.Column(db.String(60), nullable=False)
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(60), nullable=False)
 
-#     def __repr__(self):
-#         return f"User('{self.name}', '{self.email}')"
+    def __repr__(self):
+        return f"User('{self.name}', '{self.email}')"
 
-# with app.app_context():
-#     db.create_all()
+with app.app_context():
+    db.create_all()
 
 @app.route("/")
 @app.route("/home")
 def home():
-    return render_template('home.html', subtitle='Home Page', text='This is the home page')
+    if 'name' in session:
+        user = User.query.filter_by(email=session['name']).first()
 
-@app.route("/signup")
+        return render_template('home.html', user=user)
+
+    return render_template('home.html')
+
+@app.route("/signup", methods=['GET', 'POST'])
 def register():
     signup = SignUpForm()
     signin = SignInForm()
     if signup.validate_on_submit():
-        user = User(username=signup.name.data, email=signup.email.data, password=signup.password.data)
+        user = User(name=signup.name.data, email=signup.email.data, password=signup.password.data)
         db.session.add(user)
         db.session.commit()
         flash(f'Account created for {signup.name.data}!', 'success')
+        session['name'] = signup.email.data
         return redirect(url_for('home'))
     elif signin.validate_on_submit():
         user = User(email=signin.email.data, password=signin.password.data)
-        db.session.commit()
+        if user and user.password == signin.password.data:
+            session['name'] = user.email
         # welcome back name message needs to be updated
-        flash(f'Welcome Back!')
-        return redirect(url_for('home'))
+            flash(f'Welcome Back!')
+            return redirect(url_for('home'))
+        else:
+             flash('Please check email and password.')
     return render_template('signup.html', title='Register', signup=signup, signin = signin)
 
-@app.route("/recipe_finder", methods=['GET'])
+@app.route('/logout')
+def logout():
+   # remove the username from the session if it is there
+   session.pop('email', None)
+   return redirect(url_for('home'))
+
+@app.route("/recipe_finder", methods=['GET','POST'])
 def recipeFinder():
-    return render_template('recipe_finder.html', title='Recipe Results')
+    form = RecipeForm()
+    global inputs
+    if form.validate_on_submit():
+        inputs = [form.in_1.data, form.in_2.data, form.in_3.data, form.in_4.data, form.in_5.data, form.in_6.data, form.in_7.data, form.in_8.data, form.in_9.data, form.in_10.data]
+        return redirect(url_for('recipeResults'))
+    return render_template('recipe_finder.html', form=form)
 
 def parseIngredients(ingredients):
     parsed_ingredients = ''
@@ -81,25 +101,30 @@ def parseRecipes(recipes):
 
     return parsed_recipes
 
-@app.route("/recipe_results", methods=['GET'])
+@app.route('/loading')
+def loading_page():
+    return render_template('loading.html')
+
+@app.route("/recipe_results", methods=['GET','POST'])
 def recipeResults():
-    form = RecipeForm()
-    if form.validate_on_submit():
-        inputs = [form.in_1, form.in_2, form.in_3, form.in_4, form.in_5, form.in_6, form.in_7, form.in_8, form.in_9, form.in_10]
-    inputs = ["apples","bananas", None, "sugar"]
+    # inputs = ["apples","bananas", None, "sugar"]
     ingredients = parseIngredients(inputs)
+
     url = f'https://api.spoonacular.com/recipes/findByIngredients?ingredients={ingredients}&number=4&ranking=2&ignorePantry=false&apiKey=5ac9dabcf0c2476f8f2f8ccff61443b2'
-    
     response = requests.get(url)
+    global recipes
     recipes = parseRecipes(response.json())
-    pprint.pprint(recipes)
 
     return render_template('recipe_results.html', title='Recipe Results', recipes=recipes)
 
-'''@app.route("/recipe_info/<id>", methods=['GET'])
+@app.route("/recipe_info/<id>", methods=['GET'])
 def recipeInfo(id):
-    
-    return render_template('recipe_info.html', title='Recipe Information')'''
+    specific_recipe = None
+    for r in recipes:
+        if r['id'] == id:
+            specific_recipe = r
+            break
+    return render_template('recipe_info.html', title='Recipe Information', specific_recipe=specific_recipe)
 
 @app.route("/my_recipes")
 def myRecipes():
