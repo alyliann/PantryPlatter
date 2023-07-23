@@ -20,7 +20,7 @@ class User(db.Model):
     password = db.Column(db.String(60), nullable=False)
 
     def __repr__(self):
-        return f'User('{self.name}', '{self.email}')'
+        return f'{self.name}', '{self.email}' # Originally return f'User('{self.name}', '{self.email}')'
 
 with app.app_context():
     db.create_all()
