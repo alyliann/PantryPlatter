@@ -2,7 +2,7 @@ import requests
 import pprint
 from forms import SignUpForm, SignInForm, RecipeForm
 from flask_behind_proxy import FlaskBehindProxy
-from flask import Flask, render_template, url_for, flash, redirect, request,escape, session
+from flask import Flask, render_template, url_for, flash, redirect, request, escape, session
 from flask_sqlalchemy import SQLAlchemy
 # import git
 
