@@ -1,0 +1,19 @@
+name: Tests
+on: push
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.11.3
+          
+      - name: Test webpages
+        run: python3 tests/test_basic.py
+
+      - name: Test registration form
+        run: python3 tests/test_users.py
