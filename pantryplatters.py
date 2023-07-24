@@ -119,30 +119,51 @@ def recipeResults():
     return render_template('recipe_results.html', title='Recipe Results', recipes=recipes)
 
 def parseExtIngredients(ingredients):
-    parsed_ingredients = []
+    parsed_ingredients = {
+        'us': ['' for i in range(len(ingredients))],
+        'ingredient': ['' for i in range(len(ingredients))],
+        'metric': [None for i in range(len(ingredients))]
+    }
+    
     for i in range(len(ingredients)):
-        
-        ingredient = str(ingredients[i]['measures']['us']['amount']) + ' '
-        ingredient += ingredients[i]['measures']['us']['unitShort'] + ' '
-        if ingredients[i]['nameClean']:
-            ingredient += ingredients[i]['nameClean'].title() + ' '
+        measurements = ingredients[i]['measures']
+
+        if measurements['us']['unitShort'] == '': # no measurement (ex: 4 Apples)
+            parsed_ingredients['us'][i] = int(measurements['us']['amount'])
         else:
-            ingredient += ingredients[i]['name'].title() + ' '
+            parsed_ingredients['us'][i] = str(measurements['us']['amount']) + ' ' + measurements['us']['unitShort'].lower()
+        
+        if ingredients[i]['nameClean']:
+            parsed_ingredients['ingredient'][i] = ingredients[i]['nameClean'].title()
+        else:
+            parsed_ingredients['ingredient'][i] = ingredients[i]['name'].title()
 
-        ingredient += '(' + str(ingredients[i]['measures']['metric']['amount']) +\
-                       ingredients[i]['measures']['metric']['unitShort'] + ')'
+        if measurements['us']['unitShort'] != '' and measurements['us'] != measurements['metric']:
+            parsed_ingredients['metric'][i] = '(' + str(measurements['metric']['amount']) + ' ' +\
+                                               measurements['metric']['unitShort'].lower() + ')'
 
-        #ingredient = ingredient.title()
-
-        print(ingredient)
-
-    return
+    return parsed_ingredients
 
 def parseInstructions(instructions):
-    #pprint.pprint(instructions)
-    return
+    '''parsed_instructions = {
+        'steps': ['' for i in range(len(instructions))]
+    }
+    equipment = []
 
-@app.route('/recipe_info/<id>', methods=['GET'])
+    for i in range(len(instructions)):
+
+        parsed_instructions['steps'][i] = instructions['step']
+
+        if instructions[i]['equipment'] != []:
+            for j in range(len(instructions[i]['equipment'])):
+                equipment.append(instructions[i]['equipment'][j]['name'])
+            
+    '''
+
+    pprint.pprint(instructions)
+    return# parsed_instructions, equipment
+
+@app.route('/recipe_info/<id>', methods=['GET', 'POST'])
 def recipeInfo(id):
     url = f'https://api.spoonacular.com/recipes/{id}/information?apiKey=5ac9dabcf0c2476f8f2f8ccff61443b2'
     response = requests.get(url)
@@ -154,7 +175,7 @@ def recipeInfo(id):
     recipe_time = response.json()['readyInMinutes']
     recipe_diets = response.json()['diets']
     recipe_ingredients = parseExtIngredients(response.json()['extendedIngredients'])
-    recipe_instructions = parseInstructions(response.json()['analyzedInstructions'])
+    #recipe_instructions, recipe_equipment = parseInstructions(response.json()['analyzedInstructions'][0]['steps'])
 
     # Capitalize first letter of each word in diets:
     for i in range(len(recipe_diets)):
@@ -168,7 +189,8 @@ def recipeInfo(id):
                            recipe_summary=recipe_summary,
                            recipe_servings=recipe_servings,
                            recipe_time=recipe_time,
-                           recipe_diets=recipe_diets)
+                           recipe_diets=recipe_diets,
+                           recipe_ingredients=recipe_ingredients)
 
 @app.route('/my_recipes')
 def myRecipes():
