@@ -118,6 +118,15 @@ def recipeResults():
 
     return render_template('recipe_results.html', title='Recipe Results', recipes=recipes)
 
+# Capitalize first letter of each word in diets
+def formatDiets(diets):
+
+    for i in range(len(diets)):
+        diets[i] = diets[i].title()
+
+    return diets
+
+# Parse ingredients into dictionary separating measurements and ingredient names
 def parseExtIngredients(ingredients):
     parsed_ingredients = {
         'us': ['' for i in range(len(ingredients))],
@@ -144,6 +153,7 @@ def parseExtIngredients(ingredients):
 
     return parsed_ingredients
 
+# Parse instructions into dictionary separating step details and equipment needed for each step
 def parseInstructions(instructions):
     parsed_instructions = {
         'steps': ['' for i in range(len(instructions))],
@@ -172,13 +182,9 @@ def recipeInfo(id):
     recipe_summary = response.json()['summary']
     recipe_servings = response.json()['servings']
     recipe_time = response.json()['readyInMinutes']
-    recipe_diets = response.json()['diets']
+    recipe_diets = formatDiets(response.json()['diets'])
     recipe_ingredients = parseExtIngredients(response.json()['extendedIngredients'])
     recipe_instructions = parseInstructions(response.json()['analyzedInstructions'][0]['steps'])
-
-    # Capitalize first letter of each word in diets:
-    for i in range(len(recipe_diets)):
-        recipe_diets[i] = recipe_diets[i].title()
 
     return render_template('recipe_info.html',
                            title='Recipe Information',
