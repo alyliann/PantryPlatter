@@ -69,7 +69,7 @@ def recipeFinder():
     global inputs
     if form.validate_on_submit():
         inputs = [form.in_1.data, form.in_2.data, form.in_3.data, form.in_4.data, form.in_5.data, form.in_6.data, form.in_7.data, form.in_8.data, form.in_9.data, form.in_10.data]
-        return redirect(url_for('recipeResults'))
+        return redirect(url_for('loadingPage'))
     return render_template('recipe_finder.html', form=form)
 
 def parseIngredients(ingredients):
@@ -102,8 +102,9 @@ def parseRecipes(recipes):
     return parsed_recipes
 
 @app.route('/loading')
-def loading_page():
+def loadingPage():
     return render_template('loading.html')
+    return redirect(url_for('recipeResults'))
 
 @app.route('/recipe_results', methods=['GET','POST'])
 def recipeResults():
