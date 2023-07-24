@@ -29,14 +29,15 @@ with app.app_context():
 @app.route('/')
 @app.route('/home')
 def home():
-    # global logged_in
+    global logged_in
     if 'name' in session:
         user = User.query.filter_by(email=session['name']).first()
-        # logged_in = True
+        logged_in = True
 
-        return render_template('home.html', user=user, logged_in=True)
-    e
-    return render_template('home.html', logged_in=False)
+        return render_template('home.html', user=user, logged_in=logged_in)
+    else:
+        logged_in = False
+    return render_template('home.html', logged_in=logged_in)
 
 @app.route('/signupTest', methods=['GET', 'POST'])
 def register():
@@ -58,7 +59,7 @@ def register():
             return redirect(url_for('home'))
         else:
              flash('Please check email and password.')
-    return render_template('signupTest.html', title='Register', signup=signup, signin=signin)
+    return render_template('signupTest.html', title='Register', signup=signup, signin=signin, logged_in=logged_in)
 
 @app.route('/logout')
 def logout():
@@ -78,7 +79,7 @@ def recipeFinder():
     if form.validate_on_submit():
         inputs = [form.in_1.data, form.in_2.data, form.in_3.data, form.in_4.data, form.in_5.data, form.in_6.data, form.in_7.data, form.in_8.data, form.in_9.data, form.in_10.data]
         return redirect(url_for('loadingPage'))
-    return render_template('recipe_finder.html', form=form, logged_in=True)
+    return render_template('recipe_finder.html', form=form, logged_in=logged_in)
 
 def parseIngredients(ingredients):
     parsed_ingredients = ''
@@ -124,7 +125,7 @@ def recipeResults():
     global recipes
     recipes = parseRecipes(response.json())
 
-    return render_template('recipe_results.html', title='Recipe Results', recipes=recipes)
+    return render_template('recipe_results.html', title='Recipe Results', recipes=recipes, logged_in=logged_in)
 
 def parseExtIngredients(ingredients):
     parsed_ingredients = {
@@ -206,7 +207,7 @@ def recipeInfo(id):
 
 @app.route('/my_recipes')
 def myRecipes():
-    return render_template('my_recipes.html', title='My Recipes',)
+    return render_template('my_recipes.html', title='My Recipes', logged_in=logged_in)
 
 # @app.route('/update_server', methods=['POST'])
 # def webhook():
