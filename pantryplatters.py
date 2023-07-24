@@ -31,9 +31,9 @@ def home():
     if 'name' in session:
         user = User.query.filter_by(email=session['name']).first()
 
-        return render_template('home.html', user=user)
+        return render_template('home.html', user=user, logged_in=True)
 
-    return render_template('home.html')
+    return render_template('home.html', logged_in=False)
 
 @app.route('/signupTest', methods=['GET', 'POST'])
 def register():
@@ -55,7 +55,7 @@ def register():
             return redirect(url_for('home'))
         else:
              flash('Please check email and password.')
-    return render_template('signupTest.html', title='Register', signup=signup, signin = signin)
+    return render_template('signupTest.html', title='Register', signup=signup, signin=signin)
 
 @app.route('/logout')
 def logout():
