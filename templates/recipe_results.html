@@ -9,7 +9,7 @@
   <div class="recipe">
     <h2><a href="{{ url_for('recipeInfo', id=recipe.id) }}">{{ recipe.title }}</a></h2>
     <img src="{{ recipe.image }}" alt="{{ recipe.title }}">
-    <h3>Missed Ingredients:</h3>
+    <h3>Missing Ingredients:</h3>
     <ul>
       {% for missed_ingredient in recipe.missed_ingredients %}
       <li>{{ missed_ingredient }}</li>
