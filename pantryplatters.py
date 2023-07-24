@@ -118,14 +118,57 @@ def recipeResults():
 
     return render_template('recipe_results.html', title='Recipe Results', recipes=recipes)
 
+def parseExtIngredients(ingredients):
+    parsed_ingredients = []
+    for i in range(len(ingredients)):
+        
+        ingredient = str(ingredients[i]['measures']['us']['amount']) + ' '
+        ingredient += ingredients[i]['measures']['us']['unitShort'] + ' '
+        if ingredients[i]['nameClean']:
+            ingredient += ingredients[i]['nameClean'].title() + ' '
+        else:
+            ingredient += ingredients[i]['name'].title() + ' '
+
+        ingredient += '(' + str(ingredients[i]['measures']['metric']['amount']) +\
+                       ingredients[i]['measures']['metric']['unitShort'] + ')'
+
+        #ingredient = ingredient.title()
+
+        print(ingredient)
+
+    return
+
+def parseInstructions(instructions):
+    #pprint.pprint(instructions)
+    return
+
 @app.route('/recipe_info/<id>', methods=['GET'])
 def recipeInfo(id):
-    specific_recipe = None
-    for r in recipes:
-        if r['id'] == id:
-            specific_recipe = r
-            break
-    return render_template('recipe_info.html', title='Recipe Information', specific_recipe=specific_recipe)
+    url = f'https://api.spoonacular.com/recipes/{id}/information?apiKey=5ac9dabcf0c2476f8f2f8ccff61443b2'
+    response = requests.get(url)
+
+    recipe_title = response.json()['title']
+    recipe_image = response.json()['image']
+    recipe_summary = response.json()['summary']
+    recipe_servings = response.json()['servings']
+    recipe_time = response.json()['readyInMinutes']
+    recipe_diets = response.json()['diets']
+    recipe_ingredients = parseExtIngredients(response.json()['extendedIngredients'])
+    recipe_instructions = parseInstructions(response.json()['analyzedInstructions'])
+
+    # Capitalize first letter of each word in diets:
+    for i in range(len(recipe_diets)):
+        recipe_diets[i] = recipe_diets[i].title()
+
+    return render_template('recipe_info.html',
+                           title='Recipe Information',
+                           recipe_id=id,
+                           recipe_title=recipe_title,
+                           recipe_image=recipe_image,
+                           recipe_summary=recipe_summary,
+                           recipe_servings=recipe_servings,
+                           recipe_time=recipe_time,
+                           recipe_diets=recipe_diets)
 
 @app.route('/my_recipes')
 def myRecipes():
