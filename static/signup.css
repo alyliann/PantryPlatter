@@ -1,0 +1,23 @@
+body {
+    align-tracks: center;
+    height: 100vh;
+    background-image: url(../static/logo_transparent.png);
+    background-size: 40%;
+    background-color: rgb(154, 230, 119);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.content-section {
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.8); /* to add a semi-transparent white background to the forms */
+    padding: 15px;
+    border-radius: 5px;
+    width: 500px;
+    height: 120px;
+    
+  }
+
+h1, h2 {
+    text-align: center;
+  }
+  

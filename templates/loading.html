@@ -1,39 +1,39 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="with=device-width, intitial-scale=1.0">
-        <title>PantryPlatters Recipe Finder</title>
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='loading.css') }}">
-    </head>
-    <body>
-        <section class="header">
-            <nav>
-                <div class="logo">
-                <a href="./home"><img src="{{ url_for('static', filename='logo_transparent.png') }}" alt="logo"></a>
-                </div>
-            </nav>
-        </section>
-        <div class="landing" >
-            <h1 style="font-family: 'Trebuchet MS'"><strong>Recipes loading ...</strong></h1>
-            <img src="{{ url_for('static', filename='cooking-pot.gif') }}" alt="Pot Gif" class="pot-gif">
-            <div class="bar-body">
-                <div class="loading-container">
-                    <div class="loading-bar"></div>
-                </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="with=device-width, intitial-scale=1.0">
+    <title>PantryPlatters Recipe Finder</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='loading.css') }}">
+</head>
+<body>
+    <section class="header">
+        <nav>
+            <div class="logo">
+            <a href="./home"><img src="{{ url_for('static', filename='logo_transparent.png') }}" alt="logo"></a>
+            </div>
+        </nav>
+    </section>
+    <div class="landing" >
+        <h1 style="font-family: 'Trebuchet MS'; color: rgb(36, 91, 130);"><strong>Recipes loading ...</strong></h1>
+        <img src="{{ url_for('static', filename='cooking-pot.gif') }}" alt="Pot Gif" class="pot-gif">
+        <div class="bar-body">
+            <div class="loading-container">
+                <div class="loading-bar"></div>
             </div>
         </div>
-        <script>
-            // Function to redirect after the loading bar finishes loading
-            function redirectToRecipeResults() {
-              window.location.href = 'recipe_results'; 
-            }
-            // Call the redirection function after the loading bar finishes loading
-            document.addEventListener('DOMContentLoaded', () => {
-                setTimeout(redirectToRecipeResults, 3000); // 3000 milliseconds (3 seconds) delay
-            });
-          </script>
-    </body>
+    </div>
+    <script>
+        // Function to redirect after the loading bar finishes loading
+        function redirectToRecipeResults() {
+            window.location.href = 'recipe_results'; 
+        }
+        // Call the redirection function after the loading bar finishes loading
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(redirectToRecipeResults, 3000); // 3000 milliseconds (3 seconds) delay
+        });
+        </script>
+</body>
 </html>
 
 <!-- for the main file:

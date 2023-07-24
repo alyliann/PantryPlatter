@@ -10,6 +10,7 @@ app = Flask(__name__)
 proxied = FlaskBehindProxy(app)
 app.config['SECRET_KEY'] = '761a3091d6606b8b0ec4cdae77a5b7473060e5fdfb96840e40bb82b7b2f2cacf'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///userinfo.db'
+# Session(app)
 
 db = SQLAlchemy(app)
 
@@ -28,11 +29,13 @@ with app.app_context():
 @app.route('/')
 @app.route('/home')
 def home():
+    # global logged_in
     if 'name' in session:
         user = User.query.filter_by(email=session['name']).first()
+        # logged_in = True
 
         return render_template('home.html', user=user, logged_in=True)
-
+    e
     return render_template('home.html', logged_in=False)
 
 @app.route('/signupTest', methods=['GET', 'POST'])
@@ -60,7 +63,12 @@ def register():
 @app.route('/logout')
 def logout():
    # remove the username from the session if it is there
-   session.pop('email', None)
+   print('LOGGING OUT')
+   print(session)
+   session.pop('username', None)
+   print(session)
+   session.clear()
+   print(session)
    return redirect(url_for('home'))
 
 @app.route('/recipe_finder', methods=['GET','POST'])
@@ -70,7 +78,7 @@ def recipeFinder():
     if form.validate_on_submit():
         inputs = [form.in_1.data, form.in_2.data, form.in_3.data, form.in_4.data, form.in_5.data, form.in_6.data, form.in_7.data, form.in_8.data, form.in_9.data, form.in_10.data]
         return redirect(url_for('loadingPage'))
-    return render_template('recipe_finder.html', form=form)
+    return render_template('recipe_finder.html', form=form, logged_in=True)
 
 def parseIngredients(ingredients):
     parsed_ingredients = ''
@@ -118,15 +126,6 @@ def recipeResults():
 
     return render_template('recipe_results.html', title='Recipe Results', recipes=recipes)
 
-# Capitalize first letter of each word in diets
-def formatDiets(diets):
-
-    for i in range(len(diets)):
-        diets[i] = diets[i].title()
-
-    return diets
-
-# Parse ingredients into dictionary separating measurements and ingredient names
 def parseExtIngredients(ingredients):
     parsed_ingredients = {
         'us': ['' for i in range(len(ingredients))],
@@ -153,7 +152,6 @@ def parseExtIngredients(ingredients):
 
     return parsed_ingredients
 
-# Parse instructions into dictionary separating step details and equipment needed for each step
 def parseInstructions(instructions):
     parsed_instructions = {
         'steps': ['' for i in range(len(instructions))],
@@ -182,9 +180,17 @@ def recipeInfo(id):
     recipe_summary = response.json()['summary']
     recipe_servings = response.json()['servings']
     recipe_time = response.json()['readyInMinutes']
-    recipe_diets = formatDiets(response.json()['diets'])
+    recipe_diets = response.json()['diets']
+    '''
+    for i in range(len(recipe_diets)):
+        
+    '''
     recipe_ingredients = parseExtIngredients(response.json()['extendedIngredients'])
     recipe_instructions = parseInstructions(response.json()['analyzedInstructions'][0]['steps'])
+
+    # Capitalize first letter of each word in diets:
+    for i in range(len(recipe_diets)):
+        recipe_diets[i] = recipe_diets[i].title()
 
     return render_template('recipe_info.html',
                            title='Recipe Information',
@@ -200,7 +206,7 @@ def recipeInfo(id):
 
 @app.route('/my_recipes')
 def myRecipes():
-    return render_template('my_recipes.html', title='My Recipes')
+    return render_template('my_recipes.html', title='My Recipes',)
 
 # @app.route('/update_server', methods=['POST'])
 # def webhook():

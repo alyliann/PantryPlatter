@@ -35,10 +35,10 @@ nav img{
     background: rgb(73, 184, 112);
 }
 .nav-btn:hover{
-    background: rgb(34, 107, 77);
+    background: rgb(36, 91, 130);
     transition: 0.5s;
 }
-.row{
+.home-info .row{
     margin-top: 3%;
     display: flex;
     justify-content: space-between;
@@ -47,13 +47,21 @@ nav img{
     flex-basis: 31%;
     background: rgb(154, 230, 119);
     border-radius: 10px;
-    margin-bottom: 5%;
-    padding-top: 1%;
-    padding-bottom: 2%;
-    color: rgb(34, 107, 77);
+    margin-bottom: 2%;
+    padding-top: 2%;
+    padding-bottom: 1%;
+    color: rgb(36, 91, 130);
 }
 .home-col h3{
     font-weight: 900;
+    font-size: x-large;
+}
+.home-col p{
+    margin-left: 20px;
+    margin-right: 20px;
+    text-align: center;
+    line-height: 1.5;
+    font-size: large;
 }
 .home-col img{
     width: 120px;
@@ -64,13 +72,13 @@ nav img{
     border: 2px solid white;
 }
 h3{
+    color:rgb(53, 122, 122);
     margin-top: 30px;
     text-align: center;
 }
 p{
-    margin-left: 20px;
-    margin-right: 20px;
-    text-align: justify;
+    color:rgb(53, 122, 122);
+    text-align: center;
     line-height: 1.5;
 }
 fieldset{
@@ -91,5 +99,61 @@ fieldset{
     background: rgb(73, 184, 112, 0.50);
 }
 .form-control-label{
-    color: rgb(34, 107, 77);
+    color: rgb(36, 91, 130);
+}
+.btn{
+    font-weight: bold;
+    font-size: medium;
+    cursor: pointer;
+    height: 45px;
+    color: white;
+}
+.btn-outline-info{
+    border: 2px solid white;
+    padding: 6px;
+    background: rgb(73, 184, 112);
+    border-radius: 10%;
+}
+.btn-outline-info:hover{
+    background: rgb(36, 91, 130);
+    transition: 0.5s;
+}
+h1{
+    color: rgb(34, 87, 122);
+    text-align: center; 
+}
+h2{
+    color: rgb(34, 87, 122);
+    text-align: center;
+}
+.recipe{
+    padding: 1%;
+    margin-bottom: 5%;
+    margin-top: 2%;
+}
+.recipe .row{
+    display: flex;
+    justify-content: space-between;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+.recipe-col{
+    flex-basis: 45%;
+    background: rgb(154, 230, 119);
+    border-radius: 10px;
+}
+.recipe-col img{
+    margin-left: 20%;
+    margin-bottom: 3%;
+    border: 10px solid white;
+    border-radius: 10px;
+}
+.recipe-col h3{
+    font-weight: bold;
+    font-size: larger;
+    color:rgb(36, 91, 130)
+}
+.recipe-col ul{
+    font-size: large;
+    color:rgb(36, 91, 130);
 }

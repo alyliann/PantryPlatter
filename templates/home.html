@@ -4,45 +4,59 @@
 
 {% endblock %}
 {% block content %}
-<section class="home-info">
-    <div class="row">
-        <div class="home-col">
-            <img src="{{ url_for('static', filename='food.png') }}">
-            <h3>What is PantryPlatters?</h3>
-            <p>PantryPlatters is a recipe finder designed to inspire creativity and convenience 
-                in your kitchen by making the most of what's already in your fridge. <br>  
-                With a diverse range of recipes to suit every taste, our platform empowers 
-                you to create mouthwatering dishes that leave a lasting impression on your taste buds.<br>
-                Say goodbye to food waste and hello to delicious, convenient cooking with PantryPlatters!"
-
-            </p>
-        </div>
-        <div class="home-col">
-            <img src="{{ url_for('static', filename='cookbook.png') }}">
-            <h3>How it works:</h3>
-            <p>Using PantryPlatters is as easy as 1-2-3! Just share up to 10 ingredients from your fridge or 
-                pantry, and we will curate a list of four mouthwatering recipes tailored to your selection.  
-                Choose the one that catches your eye, and with a click, you'll receive a detailed list of 
-                additional ingredients needed and the estimated cooking time.
-
-            </p>
-        </div>
-        <div class="home-col">
-            <img src="{{ url_for('static', filename='like.png') }}">
-            <h3>Why use PantryPlatters?</h3>
-            <p>At PantryPlatters, we go beyond just offering recipes – we aim to elevate your entire culinary journey.
-                Our platform is your gateway to a world of gastronomic exploration and delightful surprises. Experience 
-                the convenience of time-saving meal planning, all while reducing food waste and embracing sustainable 
-                cooking practices. From quick and easy weekday meals to exotic weekend indulgences, our diverse range of 
-                recipes will ignite your passion for cooking. 
-            </p>
-        </div>
-    </div>
     {% if user %}
         <div class="welcome-message">
             <h2>Welcome, {{ user.name }}!</h2>
             <p>We're glad to have you here. Start exploring delicious recipes now!</p>
         </div>
-        {% endif %}
+    {% endif %}
+<section class="intro">
+    <h3>What is PantryPlatters?</h3>
+    <p>PantryPlatters is a <strong>recipe finder</strong> designed to inspire creativity and convenience 
+        in your kitchen by making the most of <strong>what's already in your fridge</strong>. 
+        <br>  
+        With a diverse range of recipes to suit every taste, our platform empowers 
+        you to create mouthwatering dishes that leave a lasting impression on your taste buds.<br>
+        Say <strong>goodbye to food waste</strong> and hello to delicious, convenient cooking with PantryPlatters!
+    </p>
+</section>
+<!-- Using PantryPlatters is as easy as 1-2-3! Just share up to 10 ingredients from your fridge or 
+    pantry, and we will curate a list of four mouthwatering recipes tailored to your selection.  
+    Choose the one that catches your eye, and with a click, you'll receive a detailed list of 
+    additional ingredients needed and the estimated cooking time. -->
+<section class="home-info">
+    <div class="row">
+        <div class="home-col">
+            <img src="{{ url_for('static', filename='food.png') }}">
+            <h3>STEP ONE</h3>
+            <p>
+                Enter <strong>up to ten ingredients</strong> you have in your kitchen into our interactive search engine
+            </p>
+        </div>
+        <div class="home-col">
+            <img src="{{ url_for('static', filename='cookbook.png') }}">
+            <h3>STEP TWO</h3>
+            <p>
+                Using your ingredients, look through a list of four <strong>mouthwatering recipes tailored to your search</strong>
+            </p>
+        </div>
+        <div class="home-col">
+            <img src="{{ url_for('static', filename='like.png') }}">
+            <h3>STEP THREE</h3>
+            <p>
+                Log in to <strong>save your favorite recipes</strong> to see again later in your MY RECIPES page
+            </p>
+        </div>
+    </div>
+    
+</section>
+<section class="page-end">
+    <h3>Why use PantryPlatters?</h3>
+    <p>At PantryPlatters, we go beyond just offering recipes – we aim to elevate your entire culinary journey.
+        Our platform is your gateway to a world of gastronomic exploration and delightful surprises. Experience 
+        the convenience of time-saving meal planning, all while reducing food waste and embracing sustainable 
+        cooking practices. From quick and easy weekday meals to exotic weekend indulgences, our diverse range of 
+        recipes will ignite your passion for cooking. 
+    </p>
 </section>
 {% endblock %}
