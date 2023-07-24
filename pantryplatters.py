@@ -35,7 +35,7 @@ def home():
 
     return render_template('home.html')
 
-@app.route('/signup', methods=['GET', 'POST'])
+@app.route('/signupTest', methods=['GET', 'POST'])
 def register():
     signup = SignUpForm()
     signin = SignInForm()
@@ -55,7 +55,7 @@ def register():
             return redirect(url_for('home'))
         else:
              flash('Please check email and password.')
-    return render_template('signup.html', title='Register', signup=signup, signin = signin)
+    return render_template('signupTest.html', title='Register', signup=signup, signin = signin)
 
 @app.route('/logout')
 def logout():
@@ -111,7 +111,7 @@ def recipeResults():
     # inputs = ['apples','bananas', None, 'sugar']
     ingredients = parseIngredients(inputs)
 
-    url = f'https://api.spoonacular.com/recipes/findByIngredients?ingredients={ingredients}&number=4&ranking=2&ignorePantry=false&apiKey=5ac9dabcf0c2476f8f2f8ccff61443b2'
+    url = f'https://api.spoonacular.com/recipes/findByIngredients?ingredients={ingredients}&number=4&ranking=2&ignorePantry=false&apiKey=02b6562e21d448619db06da5349241ae'
     response = requests.get(url)
     global recipes
     recipes = parseRecipes(response.json())
@@ -145,27 +145,26 @@ def parseExtIngredients(ingredients):
     return parsed_ingredients
 
 def parseInstructions(instructions):
-    '''parsed_instructions = {
-        'steps': ['' for i in range(len(instructions))]
+    parsed_instructions = {
+        'steps': ['' for i in range(len(instructions))],
+        'equipment': [None for i in range(len(instructions))]
     }
-    equipment = []
 
     for i in range(len(instructions)):
-
-        parsed_instructions['steps'][i] = instructions['step']
+        parsed_instructions['steps'][i] = instructions[i]['step']
 
         if instructions[i]['equipment'] != []:
+            parsed_instructions['equipment'][i] = '' # Change from NoneType to empty string
             for j in range(len(instructions[i]['equipment'])):
-                equipment.append(instructions[i]['equipment'][j]['name'])
+                parsed_instructions['equipment'][i] += instructions[i]['equipment'][j]['name'].title() + ', '
             
-    '''
-
-    pprint.pprint(instructions)
-    return# parsed_instructions, equipment
+            parsed_instructions['equipment'][i] = parsed_instructions['equipment'][i][:-2] # Remove last comma and space from string
+            
+    return parsed_instructions
 
 @app.route('/recipe_info/<id>', methods=['GET', 'POST'])
 def recipeInfo(id):
-    url = f'https://api.spoonacular.com/recipes/{id}/information?apiKey=5ac9dabcf0c2476f8f2f8ccff61443b2'
+    url = f'https://api.spoonacular.com/recipes/{id}/information?apiKey=02b6562e21d448619db06da5349241ae'
     response = requests.get(url)
 
     recipe_title = response.json()['title']
@@ -175,7 +174,7 @@ def recipeInfo(id):
     recipe_time = response.json()['readyInMinutes']
     recipe_diets = response.json()['diets']
     recipe_ingredients = parseExtIngredients(response.json()['extendedIngredients'])
-    #recipe_instructions, recipe_equipment = parseInstructions(response.json()['analyzedInstructions'][0]['steps'])
+    recipe_instructions = parseInstructions(response.json()['analyzedInstructions'][0]['steps'])
 
     # Capitalize first letter of each word in diets:
     for i in range(len(recipe_diets)):
@@ -190,7 +189,8 @@ def recipeInfo(id):
                            recipe_servings=recipe_servings,
                            recipe_time=recipe_time,
                            recipe_diets=recipe_diets,
-                           recipe_ingredients=recipe_ingredients)
+                           recipe_ingredients=recipe_ingredients,
+                           recipe_instructions=recipe_instructions)
 
 @app.route('/my_recipes')
 def myRecipes():
