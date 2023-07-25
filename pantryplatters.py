@@ -1,11 +1,10 @@
 import requests
 import pprint
-# import time
-# import datetime
+import datetime
 from forms import SignUpForm, SignInForm, RecipeForm
 from flask_behind_proxy import FlaskBehindProxy
 from flask import Flask, render_template, url_for, flash, redirect, request, escape, session
-from flask_socketio import SocketIO, emit
+# from flask_socketio import SocketIO, emit
 from flask_sqlalchemy import SQLAlchemy
 # import git
 
@@ -14,7 +13,7 @@ proxied = FlaskBehindProxy(app)
 app.config['SECRET_KEY'] = '761a3091d6606b8b0ec4cdae77a5b7473060e5fdfb96840e40bb82b7b2f2cacf'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///userinfo.db'
 
-socketio = SocketIO(app)
+# socketio = SocketIO(app)
 
 db = SQLAlchemy(app)
 
@@ -30,11 +29,11 @@ class User(db.Model):
 with app.app_context():
     db.create_all()
 
-# @app.before_request
-# def before_request():
-#     session.permanent = True
-#     app.permanent_session_lifetime = datetime.timedelta(seconds=2)
-#     session.modified = True
+@app.before_request
+def before_request():
+    session.permanent = False
+    app.permanent_session_lifetime = datetime.timedelta(seconds=2)
+    session.modified = True
 
 @app.route('/')
 @app.route('/home')
@@ -53,22 +52,30 @@ def home():
 def register():
     signup = SignUpForm()
     signin = SignInForm()
+    logged_in = False
     if signup.validate_on_submit():
+        existing_user = User.query.filter_by(email=signup.email.data).first()
+        if existing_user:
+            flash('Email already exists. Please use a different email.')
+            return redirect(url_for('register'))
         user = User(name=signup.name.data, email=signup.email.data, password=signup.password.data)
         db.session.add(user)
         db.session.commit()
+        logged_in = True
         flash(f'Account created for {signup.name.data}!', 'success')
         session['name'] = signup.email.data
         return redirect(url_for('home'))
     elif signin.validate_on_submit():
         user = User.query.filter_by(email=signin.email.data).first()
         if user and user.password == signin.password.data:
+            logged_in = True
             session['name'] = user.email
         # welcome back name message needs to be updated
             flash(f'Welcome Back!')
             return redirect(url_for('home'))
         else:
-             flash(f'Please check email and password.')
+             flash('Please check email and password.')
+             return redirect(url_for('register'))
     return render_template('signup.html', title='Register', signup=signup, signin=signin, logged_in=logged_in)
 
 @app.route('/logout')
