@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="viewport" content="with=device-width, intitial-scale=1.0">
-    <title>PantryPlatters Recipe Finder</title>
+    <title>{{ title }}</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
     <!-- fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,17 +28,60 @@
                     </li>
                     {% if logged_in %}
                     <li>
-                        <a href="../logout" class="nav-btn">LOG OUT</a>
+                        <a href="{{ url_for('logout') }}" class="nav-btn">LOG OUT</a>
                     </li>
                     {% else %}
                     <li>
-                        <a href="../signupTest" class="nav-btn">SIGN IN</a>
+                        <a href="../signup" class="nav-btn">SIGN IN</a>
                     </li>
                     {% endif %}
                 </ul>
             </div>
         </nav>
     </section>
+
+    <!-- recipe info and instructions -->
+    <!-- title='Recipe Information',
+        recipe_id=id,
+        recipe_title=recipe_title,
+        recipe_image=recipe_image,
+        recipe_summary=recipe_summary,
+        recipe_servings=recipe_servings,
+        recipe_time=recipe_time,
+        recipe_diets=recipe_diets,
+        recipe_ingredients=recipe_ingredients,
+        recipe_instructions=recipe_instructions) -->
+
+    <div class="recipe-info">
+        <h1>{{ recipe_title }}</h1>
+        <img src="{{ recipe_image }}" alt="recipe image">
+        <p>
+            {{ recipe_summary }}
+            <!-- <br> -->
+            <!-- {{ recipe_servings }} -->
+            <!-- <br> -->
+            <!-- {{ recipe_time }} -->
+        </p>
+        <h2>Diets</h2>
+        <ul>
+            {% for diet in recipe_diets %}
+            <li>{{ diet }}</li>
+            {% endfor %}
+        </ul>
+        <h2>Ingredients</h2>
+        <ul>
+            {% for i in range(num_ingredients) %}
+            <li> {{recipe_ingredients['us'][i]}} {{recipe_ingredients['ingredient'][i]}} {{ recipe_ingredients['metric'][i] }}</li>
+            {% endfor %}
+        </ul>
+        <h2>Steps</h2>
+        <ol>
+            {% for step in recipe_instructions['steps'] %}
+            <li>{{ step }}</li>
+            {% endfor %}
+        </ol>
+        
+    </div>
 
 </body>
 </html>

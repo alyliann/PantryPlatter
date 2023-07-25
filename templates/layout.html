@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+
+
 </head>
 <body>
 
@@ -33,15 +35,33 @@
                     </li>
                     {% else %}
                     <li>
-                        <a href="./signup" class="nav-btn">SIGN IN</a>
+                        <a href="./signupTest" class="nav-btn">SIGN IN</a>
                     </li>
                     {% endif %}
                 </ul>
             </div>
         </nav>
     </section>
+
 <!-- where stuff in other files goes -->
     {% block content %}{% endblock %}
+
+    <!-- <script>
+        console.log("hello world");
+        // Add an event listener for the beforeunload event
+        window.addEventListener('beforeunload', function(event) {
+        //   alert('Browser is being closed. Goodbye!');  
+          // Cancel the event to prevent the browser from closing immediately
+          event.preventDefault();
+    
+          // Some browsers might need a return value to show a custom message,
+          // but it's not reliable across all browsers.
+          event.returnValue = 'Browser is being closed. Goodbye!'; // Some browsers might require this
+    
+          // Perform any necessary cleanup or display a farewell message here
+          
+        });
+    </script> -->
 
 </body>
 </html>

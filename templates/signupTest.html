@@ -5,107 +5,116 @@
     <meta name="viewport" content="with=device-width, intitial-scale=1.0">
     <title>PantryPlatters Signup and Sign in</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='signup.css') }}">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
+
 </head>
 <body>
-  <h1>Sign up</h1>
-  <div class="content-section">
-    <form method="POST" action="">
-      {{ signup.hidden_tag() }}
-      <fieldset class="form-group">
+  <!-- <h1>Sign up</h1> -->
+  <div class="center-container">
+    <div class="content-section">
+      <h2 style="color: rgb(36, 91, 130)">Sign up for PantryPlatters</h2>
+      <form method="POST" action="">
+        {{ signup.hidden_tag() }}
+        <fieldset class="form-group">
+          <div class="form-group">
+            {{ signup.name.label(class="form-control-label") }}
+            {% if signup.name.errors %}
+              {{ signup.name(class="form-control form-control-lg is-invalid") }}
+              <div class="invalid-feedback">
+                {% for error in signup.name.errors %}
+                  <span>{{error}}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ signup.name(class="form-control form-control-lg") }}
+            {% endif %}
+          </div>
+          <div class="form-group">
+            {{ signup.email.label(class="form-control-label") }}
+            {% if signup.email.errors %}
+              {{ signup.email(class="form-control form-control-lg is-invalid") }}
+              <div class="invalid-feedback">
+                {% for error in signup.email.errors %}
+                  <span>{{error}}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ signup.email(class="form-control form-control-lg") }}
+            {% endif %}
+          </div>
+          <div class="form-group">
+            {{ signup.password.label(class="form-control-label") }}
+            {% if signup.password.errors %}
+              {{ signup.password(class="form-control form-control-lg is-invalid") }}
+              <div class="invalid-feedback">
+                {% for error in signup.password.errors %}
+                  <span>{{error}}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ signup.password(class="form-control form-control-lg") }}
+            {% endif %}
+          </div>
+          <div class="form-group">
+            {{ signup.confirm_password.label(class="form-control-label") }}
+            {% if signup.confirm_password.errors %}
+              {{ signup.confirm_password(class="form-control form-control-lg is-invalid") }}
+              <div class="invalid-feedback">
+                {% for error in signup.confirm_password.errors %}
+                  <span>{{error}}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ signup.confirm_password(class="form-control form-control-lg") }}
+            {% endif %}
+          </div>
+        </fieldset>
         <div class="form-group">
-          {{ signup.name.label(class="form-control-label") }}
-          {% if signup.name.errors %}
-            {{ signup.name(class="form-control form-control-lg is-invalid") }}
-            <div class="invalid-feedback">
-              {% for error in signup.name.errors %}
-                <span>{{error}}</span>
-              {% endfor %}
-            </div>
-          {% else %}
-            {{ signup.name(class="form-control form-control-lg") }}
-          {% endif %}
+          {{ signup.submit(class="btn btn-outline-info") }}
         </div>
-        <div class="form-group">
-          {{ signup.email.label(class="form-control-label") }}
-          {% if signup.email.errors %}
-            {{ signup.email(class="form-control form-control-lg is-invalid") }}
-            <div class="invalid-feedback">
-              {% for error in signup.email.errors %}
-                <span>{{error}}</span>
-              {% endfor %}
-            </div>
-          {% else %}
-            {{ signup.email(class="form-control form-control-lg") }}
-          {% endif %}
-        </div>
-        <div class="form-group">
-          {{ signup.password.label(class="form-control-label") }}
-          {% if signup.password.errors %}
-            {{ signup.password(class="form-control form-control-lg is-invalid") }}
-            <div class="invalid-feedback">
-              {% for error in signup.password.errors %}
-                <span>{{error}}</span>
-              {% endfor %}
-            </div>
-          {% else %}
-            {{ signup.password(class="form-control form-control-lg") }}
-          {% endif %}
-        </div>
-        <div class="form-group">
-          {{ signup.confirm_password.label(class="form-control-label") }}
-          {% if signup.confirm_password.errors %}
-            {{ signup.confirm_password(class="form-control form-control-lg is-invalid") }}
-            <div class="invalid-feedback">
-              {% for error in form.confirm_password.errors %}
-                <span>{{error}}</span>
-              {% endfor %}
-            </div>
-          {% else %}
-            {{ signup.confirm_password(class="form-control form-control-lg") }}
-          {% endif %}
-        </div>
-      </fieldset>
-      <div class="form-group">
-        {{ signup.submit(class="btn btn-outline-info") }}
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
-  <h2>Already have an account? Sign in here</h2>
-  <div class="content-section">
-    <form method="POST" action="">
-      {{ signin.hidden_tag() }}
-      <fieldset class="form-group">
+
+  <!-- <h2>Already have an account? Sign in here</h2> -->
+  <div class="center-container">
+    <div class="content-section">
+      <h2 style="color: rgb(36, 91, 130)">Already have an account? Sign in here</h2>
+      <form method="POST" action="">
+        {{ signin.hidden_tag() }}
+        <fieldset class="form-group">
+          <div class="form-group">
+            {{ signin.email.label(class="form-control-label") }}
+            {% if signin.email.errors %}
+              {{ signin.email(class="form-control form-control-lg is-invalid") }}
+              <div class="invalid-feedback">
+                {% for error in signin.email.errors %}
+                  <span>{{error}}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ signin.email(class="form-control form-control-lg") }}
+            {% endif %}
+          </div>
+          <div class="form-group">
+            {{ signin.password.label(class="form-control-label") }}
+            {% if signin.password.errors %}
+              {{ signin.password(class="form-control form-control-lg is-invalid") }}
+              <div class="invalid-feedback">
+                {% for error in signin.password.errors %}
+                  <span>{{error}}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ signin.password(class="form-control form-control-lg") }}
+            {% endif %}
+          </div>
+        </fieldset>
         <div class="form-group">
-          {{ signin.email.label(class="form-control-label") }}
-          {% if signin.email.errors %}
-            {{ signin.email(class="form-control form-control-lg is-invalid") }}
-            <div class="invalid-feedback">
-              {% for error in signin.email.errors %}
-                <span>{{error}}</span>
-              {% endfor %}
-            </div>
-          {% else %}
-            {{ signin.email(class="form-control form-control-lg") }}
-          {% endif %}
+          {{ signin.submit(class="btn btn-outline-info") }}
         </div>
-        <div class="form-group">
-          {{ signin.password.label(class="form-control-label") }}
-          {% if signin.password.errors %}
-            {{ signin.password(class="form-control form-control-lg is-invalid") }}
-            <div class="invalid-feedback">
-              {% for error in signin.password.errors %}
-                <span>{{error}}</span>
-              {% endfor %}
-            </div>
-          {% else %}
-            {{ signin.password(class="form-control form-control-lg") }}
-          {% endif %}
-        </div>
-      </fieldset>
-      <div class="form-group">
-        {{ signin.submit(class="btn btn-outline-info") }}
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 
 </body>

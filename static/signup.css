@@ -1,22 +1,38 @@
 body {
-    height: 100vh;
-    background-image: url(../static/logo_transparent.png);
-    background-size: 40%;
-    background-color: rgb(154, 230, 119);
-    background-repeat: no-repeat;
-    background-position: center;
+  height: 95vh;
+  background: url(../static/logo_transparent.png) center top; /*url(../static/cooking_pattern.png) right top;*/
+  background-size: 20%;
+  background-color: rgb(154, 230, 119);
+  background-repeat: no-repeat;
+}
+
+.center-container {
+  margin-top: 40px;
+  margin-right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .content-section {
-    align-items: center;
-    background-color: rgba(255, 255, 255, 0.8); /* to add a semi-transparent white background to the forms */
-    padding: 15px;
-    border-radius: 5px;
-    width: 500px;
-    height: 120px;
-    
+  background-color: rgba(255, 255, 255, 0.8); /* to add a semi-transparent white background to the forms */
+  padding: 15px;
+  border-radius: 5px;
+  width: 500px;
+  /* height: 120px; */
+  max-width: 90%;
+  margin-top: 40px;
+  margin-bottom: 0px;
   }
 
 h1, h2 {
-    text-align: center;
+  text-align: center;
   }
-  
+
+.form-group{
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.form-control {
+  width: 60%;
+}

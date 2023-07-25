@@ -139,13 +139,11 @@ h2{
 }
 .recipe-col{
     flex-basis: 45%;
-    background: rgb(154, 230, 119);
-    border-radius: 10px;
 }
 .recipe-col img{
     margin-left: 20%;
     margin-bottom: 3%;
-    border: 10px solid white;
+    border: 10px solid rgb(40, 133, 116);
     border-radius: 10px;
 }
 .recipe-col h3{

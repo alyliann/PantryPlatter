@@ -27,12 +27,10 @@ with app.app_context():
 @app.route('/')
 @app.route('/home')
 def home():
-    #global logged_in
+    global logged_in
     if 'email' in session:
         user = User.query.filter_by(email=session['email']).first()
-        print(user.name)
-        #logged_in = True
-
+        logged_in = True
         return render_template('home.html', user=user, logged_in=True)
     return render_template('home.html', logged_in=False)
 
@@ -69,13 +67,15 @@ def logout():
 
 @app.route('/recipe_finder', methods=['GET','POST'])
 def recipeFinder():
+    logged_in = False
+    if 'email' in session:
+        logged_in = True
     form = RecipeForm()
     global inputs
     if form.validate_on_submit():
         inputs = [form.in_1.data, form.in_2.data, form.in_3.data, form.in_4.data, form.in_5.data, form.in_6.data, form.in_7.data, form.in_8.data, form.in_9.data, form.in_10.data]
         return redirect(url_for('loadingPage'))
-    return render_template('recipe_finder.html', form=form)
-    return render_template('recipe_finder.html', form=form, logged_in=True)
+    return render_template('recipe_finder.html', form=form,logged_in=logged_in)
 
 def parseIngredients(ingredients):
     parsed_ingredients = ''
@@ -95,9 +95,9 @@ def parseRecipes(recipes):
             'used_ingredients': []
         }
         for j in range(recipes[i]['missedIngredientCount']):
-            parsed_recipe['missed_ingredients'].append(recipes[i]['missedIngredients'][j]['name'])
+            parsed_recipe['missed_ingredients'].append(recipes[i]['missedIngredients'][j]['name'].title())
         for j in range(recipes[i]['usedIngredientCount']):
-            parsed_recipe['used_ingredients'].append(recipes[i]['usedIngredients'][j]['name'])
+            parsed_recipe['used_ingredients'].append(recipes[i]['usedIngredients'][j]['name'].title())
         parsed_recipes.append(parsed_recipe)
     return parsed_recipes
 @app.route('/loading')
@@ -106,14 +106,16 @@ def loadingPage():
     return redirect(url_for('recipeResults'))
 @app.route('/recipe_results', methods=['GET','POST'])
 def recipeResults():
-    inputs = ['apples','bananas', None, 'sugar']
+    logged_in = False
+    if 'email' in session:
+        logged_in = True
     ingredients = parseIngredients(inputs)
     url = f'https://api.spoonacular.com/recipes/findByIngredients?ingredients={ingredients}&number=4&ranking=2&ignorePantry=false&apiKey=02b6562e21d448619db06da5349241ae'
     response = requests.get(url)
     global recipes
     recipes = parseRecipes(response.json())
 
-    return render_template('recipe_results.html', title='Recipe Results', recipes=recipes)
+    return render_template('recipe_results.html', title='Recipe Results', recipes=recipes, logged_in=logged_in)
 
 # Capitalize first letter of each word in diets
 def formatDiets(diets):
@@ -152,8 +154,8 @@ def parseExtIngredients(ingredients):
 def parseInstructions(instructions):
     if instructions == []: # if recipe has no instructions
         return {
-            'steps': [],
-            'equipment': []
+            'steps': ['Instructions have not been provided for this recipe :('],
+            'equipment': [None]
         }
     else:
         instructions = instructions[0]['steps']
@@ -174,6 +176,9 @@ def parseInstructions(instructions):
     return parsed_instructions
 @app.route('/recipe_info/<id>', methods=['GET', 'POST'])
 def recipeInfo(id):
+    logged_in = False
+    if 'email' in session:
+        logged_in = True
     url = f'https://api.spoonacular.com/recipes/{id}/information?apiKey=02b6562e21d448619db06da5349241ae'
     response = requests.get(url)
     recipe_title = response.json()['title']
@@ -198,13 +203,13 @@ def recipeInfo(id):
                            recipe_diets=recipe_diets,
                            recipe_ingredients=recipe_ingredients,
                            recipe_instructions=recipe_instructions,
-                           num_ingredients=num_ingredients)
-@app.route('/save_recipes/<id>', methods=['POST'])
+                           num_ingredients=num_ingredients, logged_in=logged_in)
+                           
 def saveRecipes(id):
     if 'email' in session:
         user = User.query.filter_by(email=session['email']).first()
         if user:
-            if user.saved_recipes is None:
+            if user.saved_recipes is "":
                 user.saved_recipes = str(id)
                 print(user.saved_recipes)
             else:
