@@ -56,7 +56,7 @@
                 {% if signup.confirm_password.errors %}
                   {{ signup.confirm_password(class="form-control form-control-lg is-invalid") }}
                   <div class="invalid-feedback">
-                    {% for error in form.confirm_password.errors%}
+                    {% for error in signup.confirm_password.errors%}
                         <span>{{error}}</span>
                     {% endfor %}
                   </div>

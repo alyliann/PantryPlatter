@@ -1,8 +1,11 @@
 import requests
 import pprint
+# import time
+# import datetime
 from forms import SignUpForm, SignInForm, RecipeForm
 from flask_behind_proxy import FlaskBehindProxy
 from flask import Flask, render_template, url_for, flash, redirect, request, escape, session
+from flask_socketio import SocketIO, emit
 from flask_sqlalchemy import SQLAlchemy
 # import git
 
@@ -10,7 +13,8 @@ app = Flask(__name__)
 proxied = FlaskBehindProxy(app)
 app.config['SECRET_KEY'] = '761a3091d6606b8b0ec4cdae77a5b7473060e5fdfb96840e40bb82b7b2f2cacf'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///userinfo.db'
-# Session(app)
+
+socketio = SocketIO(app)
 
 db = SQLAlchemy(app)
 
@@ -26,6 +30,12 @@ class User(db.Model):
 with app.app_context():
     db.create_all()
 
+# @app.before_request
+# def before_request():
+#     session.permanent = True
+#     app.permanent_session_lifetime = datetime.timedelta(seconds=2)
+#     session.modified = True
+
 @app.route('/')
 @app.route('/home')
 def home():
@@ -37,9 +47,9 @@ def home():
         return render_template('home.html', user=user, logged_in=logged_in)
     else:
         logged_in = False
-    return render_template('home.html', logged_in=logged_in)
+        return render_template('home.html', logged_in=logged_in)
 
-@app.route('/signupTest', methods=['GET', 'POST'])
+@app.route('/signup', methods=['GET', 'POST'])
 def register():
     signup = SignUpForm()
     signin = SignInForm()
@@ -51,25 +61,21 @@ def register():
         session['name'] = signup.email.data
         return redirect(url_for('home'))
     elif signin.validate_on_submit():
-        user = User(email=signin.email.data, password=signin.password.data)
+        user = User.query.filter_by(email=signin.email.data).first()
         if user and user.password == signin.password.data:
             session['name'] = user.email
         # welcome back name message needs to be updated
             flash(f'Welcome Back!')
             return redirect(url_for('home'))
         else:
-             flash('Please check email and password.')
-    return render_template('signupTest.html', title='Register', signup=signup, signin=signin, logged_in=logged_in)
+             flash(f'Please check email and password.')
+    return render_template('signup.html', title='Register', signup=signup, signin=signin, logged_in=logged_in)
 
 @app.route('/logout')
 def logout():
    # remove the username from the session if it is there
-   print('LOGGING OUT')
-   print(session)
-   session.pop('username', None)
-   print(session)
-   session.clear()
-   print(session)
+   session.pop('name', None)
+   #session.clear()
    return redirect(url_for('home'))
 
 @app.route('/recipe_finder', methods=['GET','POST'])
