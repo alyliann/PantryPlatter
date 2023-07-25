@@ -4,16 +4,13 @@ import datetime
 from forms import SignUpForm, SignInForm, RecipeForm
 from flask_behind_proxy import FlaskBehindProxy
 from flask import Flask, render_template, url_for, flash, redirect, request, escape, session
-# from flask_socketio import SocketIO, emit
 from flask_sqlalchemy import SQLAlchemy
-# import git
 
 app = Flask(__name__)
 proxied = FlaskBehindProxy(app)
 app.config['SECRET_KEY'] = '761a3091d6606b8b0ec4cdae77a5b7473060e5fdfb96840e40bb82b7b2f2cacf'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///userinfo.db'
 
-# socketio = SocketIO(app)
 
 db = SQLAlchemy(app)
 
@@ -29,6 +26,7 @@ class User(db.Model):
 
 with app.app_context():
     db.create_all()
+
 
 @app.before_request
 def before_request():
@@ -131,7 +129,7 @@ def loadingPage():
 
 @app.route('/recipe_results', methods=['GET','POST'])
 def recipeResults():
-    # inputs = ['apples','bananas', None, 'sugar']
+    
     ingredients = parseIngredients(inputs)
 
     url = f'https://api.spoonacular.com/recipes/findByIngredients?ingredients={ingredients}&number=4&ranking=2&ignorePantry=false&apiKey=02b6562e21d448619db06da5349241ae'
@@ -219,8 +217,42 @@ def recipeInfo(id):
                            recipe_ingredients=recipe_ingredients,
                            recipe_instructions=recipe_instructions)
 
+@app.route('/save_recipe/<id>', methods = ['POST'])
+def saveRecipe(id):
+    if 'name' in session:
+        user = User.query.filter_by(email=session['name']).first()
+        if user:
+            if user.saved_recipes is None:
+                user.saved_recipes = str(id)
+            else:
+                user.saved_recipes += ',' + str(id)
+            db.session.commit()
+            flash('Recipe saved')
+        else:
+            flash('Login or SignUp to continue')
+    return redirect(url_for(myRecipes))
+
 @app.route('/my_recipes')
 def myRecipes():
+    logged_in = False
+    if 'name' in session:
+        logged_in = True
+        user = User.query.filter_by(email=session['name']).first()
+        if user:
+            if user.saved_recipes:
+                saved_ids = user.saved_recipes.split(',')
+                saved_recipes =[]
+                
+                for recipe_id in saved_ids:
+                    info = recipeInfo(recipe_id)
+                    if info:
+                        saved_recipes.append(info)
+            else: 
+                saved_recipes =[]
+            return render_template('my_recipes.html', title ='My Recipes', logged_in = logged_in, saved_recipes=saved_recipes)
+        else:
+            flash('Login or SignUp to continue')
+            redirect(url_for('home'))
     return render_template('my_recipes.html', title='My Recipes', logged_in=logged_in)
 
 # @app.route('/update_server', methods=['POST'])
