@@ -22,6 +22,7 @@ class User(db.Model):
     name = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
+    saved_recipes = db.Column(db.String(500))
 
     def __repr__(self):
         return f'{self.name}', '{self.email}' # Originally return f'User('{self.name}', '{self.email}')'
