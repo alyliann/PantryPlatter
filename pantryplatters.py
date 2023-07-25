@@ -1,5 +1,4 @@
 import requests
-import pprint
 from forms import SignUpForm, SignInForm, RecipeForm
 from flask_behind_proxy import FlaskBehindProxy
 from flask import Flask, render_template, url_for, flash, redirect, request, escape, session
@@ -17,7 +16,7 @@ class User(db.Model):
     name = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
-    saved_recipes = db.Column(db.String(500), nullable=True)
+    saved_recipes = db.Column(db.String(), nullable=True)
     def __repr__(self):
         return f'{self.name}', '{self.email}' # Originally return f'User('{self.name}', '{self.email}')'
 
@@ -32,7 +31,9 @@ def home():
         user = User.query.filter_by(email=session['email']).first()
         logged_in = True
         return render_template('home.html', user=user, logged_in=True)
-    return render_template('home.html', logged_in=False)
+    else:
+        logged_in = False
+        return render_template('home.html', logged_in=False)
 
 @app.route('/signupTest', methods=['GET', 'POST'])
 def register():
@@ -58,6 +59,7 @@ def register():
         else:
              flash('Please check email and password.')
     return render_template('signupTest.html', title='Register', signup=signup, signin=signin, logged_in=logged_in)
+
 @app.route('/logout')
 def logout():
    # remove the username from the session if it is there
@@ -100,22 +102,25 @@ def parseRecipes(recipes):
             parsed_recipe['used_ingredients'].append(recipes[i]['usedIngredients'][j]['name'].title())
         parsed_recipes.append(parsed_recipe)
     return parsed_recipes
+
 @app.route('/loading')
 def loadingPage():
     return render_template('loading.html')
     return redirect(url_for('recipeResults'))
+
 @app.route('/recipe_results', methods=['GET','POST'])
 def recipeResults():
     logged_in = False
     if 'email' in session:
         logged_in = True
+        user = User.query.filter_by(email=session['email']).first()
     ingredients = parseIngredients(inputs)
-    url = f'https://api.spoonacular.com/recipes/findByIngredients?ingredients={ingredients}&number=4&ranking=2&ignorePantry=false&apiKey=02b6562e21d448619db06da5349241ae'
+    url = f'https://api.spoonacular.com/recipes/findByIngredients?ingredients={ingredients}&number=4&ranking=2&ignorePantry=false&apiKey=02ce6571090645978211f9751d6b9d79'
     response = requests.get(url)
     global recipes
     recipes = parseRecipes(response.json())
 
-    return render_template('recipe_results.html', title='Recipe Results', recipes=recipes, logged_in=logged_in)
+    return render_template('recipe_results.html', title='Recipe Results', recipes=recipes, logged_in=logged_in, saved_recipes=user.saved_recipes)
 
 # Capitalize first letter of each word in diets
 def formatDiets(diets):
@@ -174,16 +179,17 @@ def parseInstructions(instructions):
             parsed_instructions['equipment'][i] = parsed_instructions['equipment'][i][:-2] # Remove last comma and space from string
             
     return parsed_instructions
+
 @app.route('/recipe_info/<id>', methods=['GET', 'POST'])
 def recipeInfo(id):
     logged_in = False
     if 'email' in session:
         logged_in = True
-    url = f'https://api.spoonacular.com/recipes/{id}/information?apiKey=02b6562e21d448619db06da5349241ae'
+        user = User.query.filter_by(email=session['email']).first()
+    url = f'https://api.spoonacular.com/recipes/{id}/information?apiKey=02ce6571090645978211f9751d6b9d79'
     response = requests.get(url)
     recipe_title = response.json()['title']
     recipe_image = response.json()['image']
-    #recipe_summary = response.json()['summary']
     recipe_servings = response.json()['servings']
     recipe_time = response.json()['readyInMinutes']
     recipe_diets = formatDiets(response.json()['diets'])
@@ -197,29 +203,27 @@ def recipeInfo(id):
                            recipe_id=id,
                            recipe_title=recipe_title,
                            recipe_image=recipe_image,
-                           #recipe_summary=recipe_summary,
                            recipe_servings=recipe_servings,
                            recipe_time=recipe_time,
                            recipe_diets=recipe_diets,
                            recipe_ingredients=recipe_ingredients,
                            recipe_instructions=recipe_instructions,
-                           num_ingredients=num_ingredients, logged_in=logged_in)
-                           
-def saveRecipes(id):
+                           num_ingredients=num_ingredients,
+                           logged_in=logged_in,
+                           saved_recipes=user.saved_recipes)
+
+@app.route('/my_recipes/<id>', methods=['GET','POST'])
+def saveRecipe(id):
     if 'email' in session:
         user = User.query.filter_by(email=session['email']).first()
         if user:
-            if user.saved_recipes is "":
-                user.saved_recipes = str(id)
-                print(user.saved_recipes)
-            else:
+            if user.saved_recipes.count(id) == 0:
                 user.saved_recipes += ',' + str(id)
-                print(user.saved_recipes)
             db.session.commit()
             flash('Recipe saved')
-        else:
-            flash('Login or SignUp to continue')
-    return redirect(url_for('myRecipes'))
+            return redirect(url_for('recipeInfo', id=id))
+    else:
+        return redirect(url_for('register'))
 
 @app.route('/my_recipes')
 def myRecipes():
@@ -229,20 +233,23 @@ def myRecipes():
         user = User.query.filter_by(email=session['email']).first()
         if user:
             if user.saved_recipes:
-                saved_ids = user.saved_recipes.split(',')
-                saved_recipes =[]
-                
-                for recipe_id in saved_ids:
-                    info = recipeInfo(recipe_id)
-                    if info:
-                        saved_recipes.append(info)
-            else: 
-                saved_recipes =[]
-            print(saved_recipes)
-            return render_template('my_recipes.html', title ='My Recipes', logged_in = logged_in, saved_recipes=saved_recipes)
-        else:
-            flash('Login or SignUp to continue')
-            redirect(url_for('home'))
+                url = f'https://api.spoonacular.com/recipes/informationBulk?ids={user.saved_recipes[1:]}&apiKey=02ce6571090645978211f9751d6b9d79'
+                response = requests.get(url)
+                recipes = response.json()
+                user_recipes = []
+
+                for recipe in recipes:
+                    user_recipe = {
+                        'id': recipe['id'],
+                        'image': recipe['image'],
+                        'title': recipe['title']
+                    }
+
+                    user_recipes.append(user_recipe)
+
+            return render_template('my_recipes.html', title='My Recipes', logged_in=logged_in, user_recipes=user_recipes)
+    else:
+        return redirect(url_for('register'))
     return render_template('my_recipes.html', title='My Recipes')
 
 # @app.route('/update_server', methods=['POST'])

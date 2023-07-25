@@ -33,6 +33,7 @@ nav img{
     border: 2px solid white;
     padding: 6px;
     background: rgb(73, 184, 112);
+    border-radius: 10px;
 }
 .nav-btn:hover{
     background: rgb(36, 91, 130);
@@ -82,14 +83,15 @@ p{
     line-height: 1.5;
 }
 fieldset{
-    background: rgb(154, 230, 119);
+    background: rgb(154, 230, 119, 0.5);
+    width: 700px;
     border: none;
     height: 20%;
     padding: 10px;
 }
 .form-control-lg{
     margin-left: 3%;
-    width: 30%;
+    width: 40%;
     margin: 5px;
     padding: 2px;
     border: 2px solid rgb(40, 133, 116);
@@ -112,7 +114,7 @@ fieldset{
     border: 2px solid white;
     padding: 6px;
     background: rgb(73, 184, 112);
-    border-radius: 10%;
+    border-radius: 10px;
 }
 .btn-outline-info:hover{
     background: rgb(36, 91, 130);
@@ -126,32 +128,75 @@ h2{
     color: rgb(34, 87, 122);
     text-align: center;
 }
+.recipe a{
+    text-decoration: none;
+    color:rgb(34, 87, 122);
+    margin: 5%;
+}
 .recipe{
     padding: 1%;
-    margin-bottom: 5%;
+    margin-bottom: 2%;
     margin-top: 2%;
 }
 .recipe .row{
     display: flex;
-    justify-content: space-between;
-    margin-left: 2%;
     margin-right: 2%;
 }
 .recipe-col{
     flex-basis: 45%;
+    background: rgb(154, 230, 119, 0.5);
 }
 .recipe-col img{
     margin-left: 20%;
     margin-bottom: 3%;
-    border: 10px solid rgb(40, 133, 116);
+    border: 5px solid white;
     border-radius: 10px;
 }
 .recipe-col h3{
     font-weight: bold;
     font-size: larger;
-    color:rgb(36, 91, 130)
+    color:rgb(36, 91, 130);
+    text-align: left;
 }
 .recipe-col ul{
     font-size: large;
     color:rgb(36, 91, 130);
+}
+.save-btn{
+    font-weight: bold;
+    font-size: medium;
+    cursor: pointer;
+    height: 45px;
+    color: white;
+    border: 2px solid white;
+    padding: 6px;
+    background: rgb(73, 184, 112);
+    border-radius: 10px;
+}
+.save-btn:hover{
+    background: rgb(36, 91, 130);
+    transition: 0.5s;
+}
+.recipe-info a{
+    margin-left: 45%;
+}
+.recipe-info img{
+    padding: 1%;
+    margin-left: 15%;
+}
+.info-intro .row{
+    display: flex;
+    justify-content: space-between;
+}
+.info-col{
+    flex-basis: 45%;
+}
+
+.content-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.form-group {
+    text-align: center;
 }

@@ -41,47 +41,45 @@
     </section>
 
     <!-- recipe info and instructions -->
-    <!-- title='Recipe Information',
-        recipe_id=id,
-        recipe_title=recipe_title,
-        recipe_image=recipe_image,
-        recipe_summary=recipe_summary,
-        recipe_servings=recipe_servings,
-        recipe_time=recipe_time,
-        recipe_diets=recipe_diets,
-        recipe_ingredients=recipe_ingredients,
-        recipe_instructions=recipe_instructions) -->
 
     <div class="recipe-info">
-        <h1>{{ recipe_title }}</h1>
-        <img src="{{ recipe_image }}" alt="recipe image">
-        <p>
-            {{ recipe_summary }}
-            <!-- <br> -->
-            <!-- {{ recipe_servings }} -->
-            <!-- <br> -->
-            <!-- {{ recipe_time }} -->
-        </p>
-        <h2>Diets</h2>
-        <ul>
-            {% for diet in recipe_diets %}
-            <li>{{ diet }}</li>
-            {% endfor %}
-        </ul>
-        <h2>Ingredients</h2>
-        <ul>
-            {% for i in range(num_ingredients) %}
-            <li> {{recipe_ingredients['us'][i]}} {{recipe_ingredients['ingredient'][i]}} {{ recipe_ingredients['metric'][i] }}</li>
-            {% endfor %}
-        </ul>
-        <h2>Steps</h2>
-        <ol>
-            {% for step in recipe_instructions['steps'] %}
-            <li>{{ step }}</li>
-            {% endfor %}
-        </ol>
-        
+        <section class="info-head">
+            <h1>{{ recipe_title }}</h1>
+            {% if recipe_id|string not in saved_recipes %}
+            <a href="/my_recipes">
+            <button class="save-btn" onclick="saveRecipes(id=recipe.id)">♡ Save </button>
+            </a>
+            {% endif %}
+        </section>
+        <section class="info-intro">
+            <div class="row">
+                <div class="info-col">
+                    <img src="{{ recipe_image }}" alt="recipe image">
+                </div>
+                <div class="info-col">
+                    <h2>Diets</h2>
+                    <ul>
+                        {% for diet in recipe_diets %}
+                        <li>{{ diet }}</li>
+                        {% endfor %}
+                    </ul>
+                    <h2>Ingredients</h2>
+                    <ul>
+                        {% for i in range(num_ingredients) %}
+                        <li> {{recipe_ingredients['us'][i]}} {{recipe_ingredients['ingredient'][i]}} {{ recipe_ingredients['metric'][i] }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </section>
+        <section class="info-body">
+            <h2>Steps</h2>
+            <ol>
+                {% for step in recipe_instructions['steps'] %}
+                <li>{{ step }}</li>
+                {% endfor %}
+            </ol>
+        </section>
     </div>
-
 </body>
 </html>

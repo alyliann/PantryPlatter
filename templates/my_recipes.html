@@ -4,5 +4,17 @@
 
 {% endblock %}
 {% block content %}
-
+<h1>Saved Recipes</h1>
+<div class="recipe-container">
+  {% for recipe in user_recipes %}
+  <div class="recipe">
+    <div class="row">
+      <div class="recipe-col">
+          <h2><a href="{{ url_for('recipeInfo', id=recipe.id) }}">{{ recipe.title }}</a></h2>
+          <img src="{{ recipe.image }}" alt="{{recipe.title}}">
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
 {% endblock %}

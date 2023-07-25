@@ -1,13 +1,15 @@
 body {
+  font-family: lato, sans-serif;
   height: 95vh;
-  background: url(../static/logo_transparent.png) center top; /*url(../static/cooking_pattern.png) right top;*/
-  background-size: 20%;
+  /* background: url(../static/logo_transparent.png) center top; url(../static/cooking_pattern.png) right top; */
+  /* background-size: 20%; */
   background-color: rgb(154, 230, 119);
-  background-repeat: no-repeat;
+  /* background-repeat: no-repeat; */
+  margin: 0;
 }
 
 .center-container {
-  margin-top: 40px;
+  margin-top: 20px;
   margin-right: 20px;
   display: flex;
   flex-direction: column;
@@ -20,7 +22,7 @@ body {
   width: 500px;
   /* height: 120px; */
   max-width: 90%;
-  margin-top: 40px;
+  margin-top: 5px;
   margin-bottom: 0px;
   }
 
@@ -29,10 +31,50 @@ h1, h2 {
   }
 
 .form-group{
-  margin-top: 5px;
-  margin-bottom: 5px;
+  /* margin-top: 5px;
+  margin-bottom: 5px; */
+  border-color: rgb(22, 163, 137);
+  border-radius: 5px;
+  /* border-style: groove; */
+ 
 }
 
-.form-control {
+/* .form-control {
   width: 60%;
+} */
+.logo {
+  width: 15%;
+  margin-top: 0px;
+}
+
+.btn{
+  font-weight: bold;
+  font-size: medium;
+  cursor: pointer;
+  height: 45px;
+  color: white;
+}
+.btn-outline-info{
+  border: 2px solid white;
+  padding: 6px;
+  background: rgb(73, 184, 112);
+  border-radius: 10px;
+}
+.btn-outline-info:hover{
+  background: rgb(36, 91, 130);
+  transition: 0.5s;
+}
+.form-control-lg{
+  margin-left: 3%;
+  width: 60%;
+  margin: 5px;
+  padding: 2px;
+  border: 2px solid rgb(40, 133, 116);
+  border-radius: 5%;
+}
+.form-control-lg:hover{
+  background: rgb(73, 184, 112, 0.50);
+}
+.form-control-label{
+  color: rgb(36, 91, 130);
 }

@@ -25,7 +25,11 @@
             <li>{{ used_ingredient }}</li>
             {% endfor %}
           </ul>
-           <button name="forwardBtn" onclick="saveRecipes(recipe.id)">Save Recipes</button>
+          {% if recipe.id|string not in saved_recipes %}
+          <a href="{{ url_for('saveRecipe', id=recipe.id) }}">
+           <button class="save-btn"> ♡ Save </button>
+          </a>
+          {% endif %}
       </div>
     </div>
   </div>
