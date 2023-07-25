@@ -106,7 +106,7 @@ def loadingPage():
     return redirect(url_for('recipeResults'))
 @app.route('/recipe_results', methods=['GET','POST'])
 def recipeResults():
-    # inputs = ['apples','bananas', None, 'sugar']
+    inputs = ['apples','bananas', None, 'sugar']
     ingredients = parseIngredients(inputs)
     url = f'https://api.spoonacular.com/recipes/findByIngredients?ingredients={ingredients}&number=4&ranking=2&ignorePantry=false&apiKey=02b6562e21d448619db06da5349241ae'
     response = requests.get(url)
@@ -185,6 +185,8 @@ def recipeInfo(id):
     recipe_ingredients = parseExtIngredients(response.json()['extendedIngredients'])
     recipe_instructions = parseInstructions(response.json()['analyzedInstructions'])
 
+    num_ingredients = len(recipe_ingredients['ingredient'])
+
     return render_template('recipe_info.html',
                            title='Recipe Information',
                            recipe_id=id,
@@ -195,11 +197,12 @@ def recipeInfo(id):
                            recipe_time=recipe_time,
                            recipe_diets=recipe_diets,
                            recipe_ingredients=recipe_ingredients,
-                           recipe_instructions=recipe_instructions)
-
-def saveRecipe(id):
+                           recipe_instructions=recipe_instructions,
+                           num_ingredients=num_ingredients)
+@app.route('/save_recipes/<id>', methods=['POST'])
+def saveRecipes(id):
     if 'email' in session:
-        user = User.query.filter_by(email=session['name']).first()
+        user = User.query.filter_by(email=session['email']).first()
         if user:
             if user.saved_recipes is None:
                 user.saved_recipes = str(id)
@@ -218,7 +221,7 @@ def myRecipes():
     logged_in = False
     if 'email' in session:
         logged_in = True
-        user = User.query.filter_by(email=session['name']).first()
+        user = User.query.filter_by(email=session['email']).first()
         if user:
             if user.saved_recipes:
                 saved_ids = user.saved_recipes.split(',')
