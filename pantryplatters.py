@@ -111,16 +111,18 @@ def loadingPage():
 @app.route('/recipe_results', methods=['GET','POST'])
 def recipeResults():
     logged_in = False
+    saved_recipes = ""
     if 'email' in session:
         logged_in = True
         user = User.query.filter_by(email=session['email']).first()
+        saved_recipes = user.saved_recipes
     ingredients = parseIngredients(inputs)
-    url = f'https://api.spoonacular.com/recipes/findByIngredients?ingredients={ingredients}&number=4&ranking=2&ignorePantry=false&apiKey=02ce6571090645978211f9751d6b9d79'
+    url = f'https://api.spoonacular.com/recipes/findByIngredients?ingredients={ingredients}&number=4&ranking=2&ignorePantry=false&apiKey=e515fb0e5ffd49bfb4f35f659d20590a'
     response = requests.get(url)
     global recipes
     recipes = parseRecipes(response.json())
 
-    return render_template('recipe_results.html', title='Recipe Results', recipes=recipes, logged_in=logged_in, saved_recipes=user.saved_recipes)
+    return render_template('recipe_results.html', title='Recipe Results', recipes=recipes, logged_in=logged_in, saved_recipes=saved_recipes)
 
 # Capitalize first letter of each word in diets
 def formatDiets(diets):
@@ -183,10 +185,12 @@ def parseInstructions(instructions):
 @app.route('/recipe_info/<id>', methods=['GET', 'POST'])
 def recipeInfo(id):
     logged_in = False
+    saved_recipes = ""
     if 'email' in session:
         logged_in = True
         user = User.query.filter_by(email=session['email']).first()
-    url = f'https://api.spoonacular.com/recipes/{id}/information?apiKey=02ce6571090645978211f9751d6b9d79'
+        saved_recipes = user.saved_recipes
+    url = f'https://api.spoonacular.com/recipes/{id}/information?apiKey=e515fb0e5ffd49bfb4f35f659d20590a'
     response = requests.get(url)
     recipe_title = response.json()['title']
     recipe_image = response.json()['image']
@@ -210,7 +214,7 @@ def recipeInfo(id):
                            recipe_instructions=recipe_instructions,
                            num_ingredients=num_ingredients,
                            logged_in=logged_in,
-                           saved_recipes=user.saved_recipes)
+                           saved_recipes=saved_recipes)
 
 @app.route('/my_recipes/<id>', methods=['GET','POST'])
 def saveRecipe(id):
@@ -221,7 +225,7 @@ def saveRecipe(id):
                 user.saved_recipes += ',' + str(id)
             db.session.commit()
             flash('Recipe saved')
-            return redirect(url_for('recipeInfo', id=id))
+            return redirect(url_for('recipeResults', id=id))
     else:
         return redirect(url_for('register'))
 
@@ -232,12 +236,11 @@ def myRecipes():
         logged_in = True
         user = User.query.filter_by(email=session['email']).first()
         if user:
+            user_recipes = []
             if user.saved_recipes:
-                url = f'https://api.spoonacular.com/recipes/informationBulk?ids={user.saved_recipes[1:]}&apiKey=02ce6571090645978211f9751d6b9d79'
+                url = f'https://api.spoonacular.com/recipes/informationBulk?ids={user.saved_recipes[1:]}&apiKey=e515fb0e5ffd49bfb4f35f659d20590a'
                 response = requests.get(url)
                 recipes = response.json()
-                user_recipes = []
-
                 for recipe in recipes:
                     user_recipe = {
                         'id': recipe['id'],
