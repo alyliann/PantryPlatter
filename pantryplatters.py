@@ -1,7 +1,14 @@
 import requests
 from forms import SignUpForm, SignInForm, RecipeForm
 from flask_behind_proxy import FlaskBehindProxy
-from flask import Flask, render_template, url_for, flash, redirect, request, escape, session
+from flask import (Flask,
+                   render_template,
+                   url_for,
+                   flash,
+                   redirect,
+                   request,
+                   escape,
+                   session)
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -14,17 +21,21 @@ db = SQLAlchemy(app)
 api_key = ''
 inputs = []
 
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
     saved_recipes = db.Column(db.String(), nullable=True)
+
     def __repr__(self):
         return f'{self.name}', '{self.email}'
 
+
 with app.app_context():
     db.create_all()
+
 
 @app.route('/')
 @app.route('/home')
@@ -38,6 +49,7 @@ def home():
         logged_in = False
         return render_template('home.html', logged_in=False)
 
+
 @app.route('/signup', methods=['GET', 'POST'])
 def register():
     signup = SignUpForm()
@@ -49,7 +61,10 @@ def register():
             flash('Email already exists. Please use a different email.')
             return redirect(url_for('register'))
         else:
-            user = User(name=signup.name.data, email=signup.email.data, password=signup.password.data, saved_recipes= "")
+            user = User(name=signup.name.data,
+                        email=signup.email.data,
+                        password=signup.password.data,
+                        saved_recipes='')
             logged_in = True
             db.session.add(user)
             db.session.commit()
@@ -65,17 +80,23 @@ def register():
             flash(f'Welcome Back!')
             return redirect(url_for('home'))
         else:
-             flash('Please check email and password.')
-             return redirect(url_for('register'))
-    return render_template('signup.html', title='Register', signup=signup, signin=signin, logged_in=logged_in)
+            flash('Please check email and password.')
+            return redirect(url_for('register'))
+    return render_template('signup.html',
+                           title='Register',
+                           signup=signup,
+                           signin=signin,
+                           logged_in=logged_in)
+
 
 @app.route('/logout')
 def logout():
-   session.pop('name', None)
-   session.clear()
-   return redirect(url_for('home'))
+    session.pop('name', None)
+    session.clear()
+    return redirect(url_for('home'))
 
-@app.route('/recipe_finder', methods=['GET','POST'])
+
+@app.route('/recipe_finder', methods=['GET', 'POST'])
 def recipeFinder():
     logged_in = False
     if 'email' in session:
@@ -83,17 +104,30 @@ def recipeFinder():
     form = RecipeForm()
     global inputs
     if form.validate_on_submit():
-        inputs = [form.in_1.data, form.in_2.data, form.in_3.data, form.in_4.data, form.in_5.data, form.in_6.data, form.in_7.data, form.in_8.data, form.in_9.data, form.in_10.data]
+        inputs = [form.in_1.data,
+                  form.in_2.data,
+                  form.in_3.data,
+                  form.in_4.data,
+                  form.in_5.data,
+                  form.in_6.data,
+                  form.in_7.data,
+                  form.in_8.data,
+                  form.in_9.data,
+                  form.in_10.data]
         return redirect(url_for('loadingPage'))
-    return render_template('recipe_finder.html', form=form,logged_in=logged_in)
+    return render_template('recipe_finder.html',
+                           form=form,
+                           logged_in=logged_in)
+
 
 def parseIngredients(ingredients):
     parsed_ingredients = ''
     for item in ingredients:
         if item:
-            parsed_ingredients += item + ',' # comma-separated ingredient list
-    
-    return parsed_ingredients[:-1] # return parsed_ingredients without last comma
+            parsed_ingredients += item + ','  # comma-separated ingredient list
+
+    return parsed_ingredients[:-1]  # remove last comma in return
+
 
 def parseRecipes(recipes):
     parsed_recipes = []
@@ -106,22 +140,27 @@ def parseRecipes(recipes):
             'used_ingredients': []
         }
         for j in range(recipes[i]['missedIngredientCount']):
-            parsed_recipe['missed_ingredients'].append(recipes[i]['missedIngredients'][j]['name'].title())
+            parsed_recipe['missed_ingredients'].\
+                append(recipes[i]['missedIngredients'][j]['name'].title())
         for j in range(recipes[i]['usedIngredientCount']):
-            parsed_recipe['used_ingredients'].append(recipes[i]['usedIngredients'][j]['name'].title())
+            parsed_recipe['used_ingredients'].\
+                append(recipes[i]['usedIngredients'][j]['name'].title())
         parsed_recipes.append(parsed_recipe)
     return parsed_recipes
+
 
 @app.route('/loading')
 def loadingPage():
     return render_template('loading.html')
     return redirect(url_for('recipeResults'))
 
+
 @app.route('/limit')
 def limitReached():
     return render_template('limit.html')
 
-@app.route('/recipe_results', methods=['GET','POST'])
+
+@app.route('/recipe_results', methods=['GET', 'POST'])
 def recipeResults():
     logged_in = False
     saved_recipes = ""
@@ -132,14 +171,19 @@ def recipeResults():
     if inputs == []:
         return render_template('timeout.html')
     ingredients = parseIngredients(inputs)
-    url = f'https://api.spoonacular.com/recipes/findByIngredients?ingredients={ingredients}&number=10&ranking=2&ignorePantry=false&apiKey={api_key}'
+    url = f'https://api.spoonacular.com/recipes/findByIngredients?ingredients={ingredients}&number=10&ranking=2&ignorePantry=false&apiKey={api_key}'  # noqa
     response = requests.get(url)
     if response.status_code == 402:
         return redirect(url_for('limitReached'))
     global recipes
     recipes = parseRecipes(response.json())
 
-    return render_template('recipe_results.html', title='Recipe Results', recipes=recipes, logged_in=logged_in, saved_recipes=saved_recipes)
+    return render_template('recipe_results.html',
+                           title='Recipe Results',
+                           recipes=recipes,
+                           logged_in=logged_in,
+                           saved_recipes=saved_recipes)
+
 
 # Capitalize first letter of each word in diets
 def formatDiets(diets):
@@ -149,34 +193,41 @@ def formatDiets(diets):
 
     return diets
 
-# Parse ingredients into dictionary separating measurements and ingredient names
+
+# Parse ingredients by separating measurements and ingredient names
 def parseExtIngredients(ingredients):
     parsed_ingredients = {
         'us': ['' for i in range(len(ingredients))],
         'ingredient': ['' for i in range(len(ingredients))],
         'metric': ['' for i in range(len(ingredients))]
     }
-    
+
     for i in range(len(ingredients)):
         measurements = ingredients[i]['measures']
-        if measurements['us']['unitShort'] == '': # no measurement (ex: 4 Apples)
+        if measurements['us']['unitShort'] == '':
             parsed_ingredients['us'][i] = int(measurements['us']['amount'])
         else:
-            parsed_ingredients['us'][i] = str(measurements['us']['amount']) + ' ' + measurements['us']['unitShort'].lower()
-        
+            parsed_ingredients['us'][i] = str(measurements['us']['amount']) +\
+                 ' ' + measurements['us']['unitShort'].lower()
+
         if ingredients[i]['nameClean']:
-            parsed_ingredients['ingredient'][i] = ingredients[i]['nameClean'].title()
+            parsed_ingredients['ingredient'][i] =\
+                ingredients[i]['nameClean'].title()
         else:
-            parsed_ingredients['ingredient'][i] = ingredients[i]['name'].title()
-        if measurements['us']['unitShort'] != '' and measurements['us'] != measurements['metric']:
-            parsed_ingredients['metric'][i] = '(' + str(measurements['metric']['amount']) + ' ' +\
-                                               measurements['metric']['unitShort'].lower() + ')'
+            parsed_ingredients['ingredient'][i] =\
+                ingredients[i]['name'].title()
+        if measurements['us']['unitShort'] != '' and\
+                measurements['us'] != measurements['metric']:
+            parsed_ingredients['metric'][i] =\
+                '(' + str(measurements['metric']['amount']) + ' ' +\
+                    measurements['metric']['unitShort'].lower() + ')'
 
     return parsed_ingredients
 
-# Parse instructions into dictionary separating step details and equipment needed for each step
+
+# Parse instructions separating step details and equipment needed
 def parseInstructions(instructions):
-    if instructions == []: # if recipe has no instructions
+    if instructions == []:  # if recipe has no instructions
         return {
             'steps': ['Instructions have not been provided for this recipe :('],
             'equipment': [None]
@@ -191,11 +242,11 @@ def parseInstructions(instructions):
     for i in range(len(instructions)):
         parsed_instructions['steps'][i] = instructions[i]['step']
         if instructions[i]['equipment'] != []:
-            parsed_instructions['equipment'][i] = '' # Change from NoneType to empty string
+            parsed_instructions['equipment'][i] = ''  # Change from NoneType to empty string
             for j in range(len(instructions[i]['equipment'])):
                 parsed_instructions['equipment'][i] += instructions[i]['equipment'][j]['name'].title() + ', '
             
-            parsed_instructions['equipment'][i] = parsed_instructions['equipment'][i][:-2] # Remove last comma and space from string
+            parsed_instructions['equipment'][i] = parsed_instructions['equipment'][i][:-2]  # Remove last comma and space from string
             
     return parsed_instructions
 
