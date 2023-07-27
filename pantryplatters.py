@@ -6,12 +6,12 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 proxied = FlaskBehindProxy(app)
-app.config['SECRET_KEY'] = '761a3091d6606b8b0ec4cdae77a5b7473060e5fdfb96840e40bb82b7b2f2cacf'
+app.config['SECRET_KEY'] = ''
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///userinfo.db'
 
 db = SQLAlchemy(app)
 
-api_key = '90d39d863fa541a0bc6a057c2f93f6fa'
+api_key = ''
 inputs = []
 
 class User(db.Model):
@@ -60,7 +60,7 @@ def register():
         existing_user = User.query.filter_by(email=signin.email.data).first()
         user = User(email=signin.email.data, password=signin.password.data)
         logged_in = True
-        if user and user.password == existing_user and existing_user.password:
+        if user and user.password == existingexisting_user.password:
             session['email'] = user.email
             flash(f'Welcome Back!')
             return redirect(url_for('home'))
