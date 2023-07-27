@@ -78,3 +78,13 @@ h1, h2 {
 .form-control-label{
   color: rgb(36, 91, 130);
 }
+.error-msg ul li{
+  background-color: rgb(40, 133, 116, 0.2);
+  color:rgb(36, 91, 130);
+  list-style: none;
+  padding: 5px;
+  text-align: center;
+  border-radius: 10px;
+  border: 1px solid rgb(36, 91, 130);
+  margin-right: 40px;
+}
