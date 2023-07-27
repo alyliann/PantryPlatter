@@ -35,17 +35,3 @@
         </script>
 </body>
 </html>
-
-<!-- for the main file:
-@app.route('/loading')
-def loading():
-    return render_template('loading.html')
-
-@app.route('/progress')
-def progress():
-    def generate():
-        for i in range(101):
-            time.sleep(0.1)  # Simulate processing time
-            yield f"data: {i}\n\n"
-
-    return Response(generate(), content_type='text/event-stream') -->
