@@ -44,6 +44,10 @@ def register():
     signin = SignInForm()
     logged_in = False
     if signup.validate_on_submit():
+        existing_user = User.query.filter_by(email=signup.email.data).first()
+        if existing_user:
+            flash('Email already exists. Please use a different email.', 'danger')
+            return redirect(url_for('register'))
         user = User(name=signup.name.data, email=signup.email.data, password=signup.password.data, saved_recipes= "")
         logged_in = True
         db.session.add(user)
