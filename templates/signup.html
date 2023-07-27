@@ -5,13 +5,23 @@
     <meta name="viewport" content="with=device-width, intitial-scale=1.0">
     <title>PantryPlatters Signup and Sign in</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='signup.css') }}">
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
 
 </head>
 <body>
   <!-- <h1>Sign up</h1> -->
   <div class="center-container">
     <img src="../static/logo_transparent(1).png" alt="Logo" class="logo">
+    <div class="error-msg">
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
+    </div>
     <div class="content-section">
       <h2 style="color: rgb(36, 91, 130)">Sign up for PantryPlatters</h2>
       <form method="POST" action="">
