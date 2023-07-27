@@ -11,6 +11,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///userinfo.db'
 
 db = SQLAlchemy(app)
 
+api_key = '02b6562e21d448619db06da5349241ae'
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False)
@@ -86,6 +88,7 @@ def parseIngredients(ingredients):
             parsed_ingredients += item + ',' # comma-separated ingredient list
     
     return parsed_ingredients[:-1] # return parsed_ingredients without last comma
+
 def parseRecipes(recipes):
     parsed_recipes = []
     for i in range(len(recipes)):
@@ -117,7 +120,7 @@ def recipeResults():
         user = User.query.filter_by(email=session['email']).first()
         saved_recipes = user.saved_recipes
     ingredients = parseIngredients(inputs)
-    url = f'https://api.spoonacular.com/recipes/findByIngredients?ingredients={ingredients}&number=4&ranking=2&ignorePantry=false&apiKey=e515fb0e5ffd49bfb4f35f659d20590a'
+    url = f'https://api.spoonacular.com/recipes/findByIngredients?ingredients={ingredients}&number=4&ranking=2&ignorePantry=false&apiKey={api_key}'
     response = requests.get(url)
     global recipes
     recipes = parseRecipes(response.json())
@@ -190,7 +193,7 @@ def recipeInfo(id):
         logged_in = True
         user = User.query.filter_by(email=session['email']).first()
         saved_recipes = user.saved_recipes
-    url = f'https://api.spoonacular.com/recipes/{id}/information?apiKey=e515fb0e5ffd49bfb4f35f659d20590a'
+    url = f'https://api.spoonacular.com/recipes/{id}/information?apiKey={api_key}'
     response = requests.get(url)
     recipe_title = response.json()['title']
     recipe_image = response.json()['image']
@@ -238,7 +241,7 @@ def myRecipes():
         if user:
             user_recipes = []
             if user.saved_recipes:
-                url = f'https://api.spoonacular.com/recipes/informationBulk?ids={user.saved_recipes[1:]}&apiKey=e515fb0e5ffd49bfb4f35f659d20590a'
+                url = f'https://api.spoonacular.com/recipes/informationBulk?ids={user.saved_recipes[1:]}&apiKey={api_key}'
                 response = requests.get(url)
                 recipes = response.json()
                 for recipe in recipes:

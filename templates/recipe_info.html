@@ -46,8 +46,8 @@
         <section class="info-head">
             <h1>{{ recipe_title }}</h1>
             {% if recipe_id|string not in saved_recipes %}
-            <a href="/my_recipes">
-            <button class="save-btn" onclick="saveRecipes(id=recipe.id)">♡ Save </button>
+            <a href="{{ url_for('saveRecipe', id=recipe_id) }}">
+            <button class="save-btn">♡ Save </button>
             </a>
             {% endif %}
         </section>
