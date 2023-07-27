@@ -13,7 +13,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 proxied = FlaskBehindProxy(app)
-app.config['SECRET_KEY'] = ''
+app.config['SECRET_KEY'] = ''  # noqa
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///userinfo.db'
 
 db = SQLAlchemy(app)
@@ -220,7 +220,7 @@ def parseExtIngredients(ingredients):
                 measurements['us'] != measurements['metric']:
             parsed_ingredients['metric'][i] =\
                 '(' + str(measurements['metric']['amount']) + ' ' +\
-                    measurements['metric']['unitShort'].lower() + ')'
+                measurements['metric']['unitShort'].lower() + ')'
 
     return parsed_ingredients
 
@@ -229,7 +229,9 @@ def parseExtIngredients(ingredients):
 def parseInstructions(instructions):
     if instructions == []:  # if recipe has no instructions
         return {
-            'steps': ['Instructions have not been provided for this recipe :('],
+            'steps': [
+                'Instructions have not been provided for this recipe :('
+            ],
             'equipment': [None]
         }
     else:
@@ -242,13 +244,16 @@ def parseInstructions(instructions):
     for i in range(len(instructions)):
         parsed_instructions['steps'][i] = instructions[i]['step']
         if instructions[i]['equipment'] != []:
-            parsed_instructions['equipment'][i] = ''  # Change from NoneType to empty string
+            parsed_instructions['equipment'][i] = ''
             for j in range(len(instructions[i]['equipment'])):
-                parsed_instructions['equipment'][i] += instructions[i]['equipment'][j]['name'].title() + ', '
-            
-            parsed_instructions['equipment'][i] = parsed_instructions['equipment'][i][:-2]  # Remove last comma and space from string
-            
+                parsed_instructions['equipment'][i] +=\
+                    instructions[i]['equipment'][j]['name'].title() + ', '
+
+            parsed_instructions['equipment'][i] =\
+                parsed_instructions['equipment'][i][:-2]
+
     return parsed_instructions
+
 
 @app.route('/recipe_info/<id>', methods=['GET', 'POST'])
 def recipeInfo(id):
@@ -258,7 +263,7 @@ def recipeInfo(id):
         logged_in = True
         user = User.query.filter_by(email=session['email']).first()
         saved_recipes = user.saved_recipes
-    url = f'https://api.spoonacular.com/recipes/{id}/information?apiKey={api_key}'
+    url = f'https://api.spoonacular.com/recipes/{id}/information?apiKey={api_key}'  # noqa
     response = requests.get(url)
     if response.status_code == 402:
         return redirect(url_for('limitReached'))
@@ -267,8 +272,10 @@ def recipeInfo(id):
     recipe_servings = response.json()['servings']
     recipe_time = response.json()['readyInMinutes']
     recipe_diets = formatDiets(response.json()['diets'])
-    recipe_ingredients = parseExtIngredients(response.json()['extendedIngredients'])
-    recipe_instructions = parseInstructions(response.json()['analyzedInstructions'])
+    recipe_ingredients =\
+        parseExtIngredients(response.json()['extendedIngredients'])
+    recipe_instructions =\
+        parseInstructions(response.json()['analyzedInstructions'])
 
     num_ingredients = len(recipe_ingredients['ingredient'])
 
@@ -286,7 +293,8 @@ def recipeInfo(id):
                            logged_in=logged_in,
                            saved_recipes=saved_recipes)
 
-@app.route('/my_recipes/<id>', methods=['GET','POST'])
+
+@app.route('/my_recipes/<id>', methods=['GET', 'POST'])
 def saveRecipe(id):
     if 'email' in session:
         user = User.query.filter_by(email=session['email']).first()
@@ -299,6 +307,7 @@ def saveRecipe(id):
     else:
         return redirect(url_for('register'))
 
+
 @app.route('/my_recipes')
 def myRecipes():
     logged_in = False
@@ -308,7 +317,7 @@ def myRecipes():
         if user:
             user_recipes = []
             if user.saved_recipes:
-                url = f'https://api.spoonacular.com/recipes/informationBulk?ids={user.saved_recipes[1:]}&apiKey={api_key}'
+                url = f'https://api.spoonacular.com/recipes/informationBulk?ids={user.saved_recipes[1:]}&apiKey={api_key}'  # noqa
                 response = requests.get(url)
                 if response.status_code == 402:
                     return redirect(url_for('limitReached'))
@@ -322,7 +331,10 @@ def myRecipes():
 
                     user_recipes.append(user_recipe)
 
-            return render_template('my_recipes.html', title='My Recipes', logged_in=logged_in, user_recipes=user_recipes)
+            return render_template('my_recipes.html',
+                                   title='My Recipes',
+                                   logged_in=logged_in,
+                                   user_recipes=user_recipes)
     else:
         return redirect(url_for('register'))
     return render_template('my_recipes.html', title='My Recipes')
@@ -336,5 +348,7 @@ def myRecipes():
 #         return 'Updated PythonAnywhere successfully', 200
 #     else:
 #         return 'Wrong event type', 400
+
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
