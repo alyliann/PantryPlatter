@@ -46,24 +46,27 @@ def register():
     if signup.validate_on_submit():
         existing_user = User.query.filter_by(email=signup.email.data).first()
         if existing_user:
-            flash('Email already exists. Please use a different email.', 'danger')
+            flash('Email already exists. Please use a different email.')
             return redirect(url_for('register'))
-        user = User(name=signup.name.data, email=signup.email.data, password=signup.password.data, saved_recipes= "")
-        logged_in = True
-        db.session.add(user)
-        db.session.commit()
-        flash(f'Account created for {signup.name.data}!', 'success')
-        session['email'] = signup.email.data
-        return redirect(url_for('home'))
+        else:
+            user = User(name=signup.name.data, email=signup.email.data, password=signup.password.data, saved_recipes= "")
+            logged_in = True
+            db.session.add(user)
+            db.session.commit()
+            flash(f'Account created for {signup.name.data}!')
+            session['email'] = signup.email.data
+            return redirect(url_for('home'))
     elif signin.validate_on_submit():
+        existing_user = User.query.filter_by(email=signin.email.data).first()
         user = User(email=signin.email.data, password=signin.password.data)
         logged_in = True
-        if user and user.password == signin.password.data:
+        if user and user.password == existing_user.password:
             session['email'] = user.email
             flash(f'Welcome Back!')
             return redirect(url_for('home'))
         else:
              flash('Please check email and password.')
+             return redirect(url_for('register'))
     return render_template('signup.html', title='Register', signup=signup, signin=signin, logged_in=logged_in)
 
 @app.route('/logout')
