@@ -60,7 +60,7 @@ def register():
         existing_user = User.query.filter_by(email=signin.email.data).first()
         user = User(email=signin.email.data, password=signin.password.data)
         logged_in = True
-        if user and user.password == existingexisting_user.password:
+        if user and user.password == existing_user and existing_user.password:
             session['email'] = user.email
             flash(f'Welcome Back!')
             return redirect(url_for('home'))
