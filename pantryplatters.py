@@ -120,7 +120,7 @@ def recipeResults():
         user = User.query.filter_by(email=session['email']).first()
         saved_recipes = user.saved_recipes
     ingredients = parseIngredients(inputs)
-    url = f'https://api.spoonacular.com/recipes/findByIngredients?ingredients={ingredients}&number=4&ranking=2&ignorePantry=false&apiKey={api_key}'
+    url = f'https://api.spoonacular.com/recipes/findByIngredients?ingredients={ingredients}&number=10&ranking=2&ignorePantry=false&apiKey={api_key}'
     response = requests.get(url)
     global recipes
     recipes = parseRecipes(response.json())
