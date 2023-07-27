@@ -21,7 +21,7 @@ class User(db.Model):
     password = db.Column(db.String(60), nullable=False)
     saved_recipes = db.Column(db.String(), nullable=True)
     def __repr__(self):
-        return f'{self.name}', '{self.email}' # Originally return f'User('{self.name}', '{self.email}')'
+        return f'{self.name}', '{self.email}'
 
 with app.app_context():
     db.create_all()
@@ -56,7 +56,6 @@ def register():
         logged_in = True
         if user and user.password == signin.password.data:
             session['email'] = user.email
-        # welcome back name message needs to be updated
             flash(f'Welcome Back!')
             return redirect(url_for('home'))
         else:
@@ -65,7 +64,6 @@ def register():
 
 @app.route('/logout')
 def logout():
-   # remove the username from the session if it is there
    session.pop('name', None)
    session.clear()
    return redirect(url_for('home'))
