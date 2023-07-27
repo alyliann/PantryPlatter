@@ -40,7 +40,7 @@ PantryPlatter is a "what's in your fridge" recipe finder, using ingredients the 
 
 To get your own **Spoonacular API Key**, head to [Spoonacular](https://spoonacular.com/food-api) to [sign up](https://spoonacular.com/food-api/console#Dashboard) and obtain a free API Key, limited to **150 calls per day**.
 
-To use your Spoonacular API Key with PantryPlatters, simply paste your API Key between the single quotes on Line 14 of `pantryplatters.py`.
+To use your Spoonacular API Key with PantryPlatters, simply paste your API Key between the single quotes on Line 21 of `pantryplatters.py`.
 
 ### Obtaining a Secret Key
 
@@ -49,4 +49,4 @@ To get your own **DJANGO Secret Key**, open up your terminal and open up the Pyt
 
 Once in the Python Shell, type ```import secrets``` and hit Enter. Next, type ```secrets.token_hex(16)``` and the shell should print out a key of letters and numbers.
 
-To use your secret key with PantryPlatters, simply paste it between the single quotes on Line 9 of `pantryplatters.py`.
+To use your secret key with PantryPlatters, simply paste it between the single quotes on Line 16 of `pantryplatters.py`.
