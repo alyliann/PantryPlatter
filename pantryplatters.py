@@ -12,6 +12,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///userinfo.db'
 db = SQLAlchemy(app)
 
 api_key = '02b6562e21d448619db06da5349241ae'
+inputs = []
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -37,7 +38,7 @@ def home():
         logged_in = False
         return render_template('home.html', logged_in=False)
 
-@app.route('/signupTest', methods=['GET', 'POST'])
+@app.route('/signup', methods=['GET', 'POST'])
 def register():
     signup = SignUpForm()
     signin = SignInForm()
@@ -60,7 +61,7 @@ def register():
             return redirect(url_for('home'))
         else:
              flash('Please check email and password.')
-    return render_template('signupTest.html', title='Register', signup=signup, signin=signin, logged_in=logged_in)
+    return render_template('signup.html', title='Register', signup=signup, signin=signin, logged_in=logged_in)
 
 @app.route('/logout')
 def logout():
@@ -111,6 +112,10 @@ def loadingPage():
     return render_template('loading.html')
     return redirect(url_for('recipeResults'))
 
+@app.route('/limit')
+def limitReached():
+    return render_template('limit.html')
+
 @app.route('/recipe_results', methods=['GET','POST'])
 def recipeResults():
     logged_in = False
@@ -119,9 +124,13 @@ def recipeResults():
         logged_in = True
         user = User.query.filter_by(email=session['email']).first()
         saved_recipes = user.saved_recipes
+    if inputs == []:
+        return render_template('timeout.html')
     ingredients = parseIngredients(inputs)
     url = f'https://api.spoonacular.com/recipes/findByIngredients?ingredients={ingredients}&number=10&ranking=2&ignorePantry=false&apiKey={api_key}'
     response = requests.get(url)
+    if response.status_code == 402:
+        return redirect(url_for('limitReached'))
     global recipes
     recipes = parseRecipes(response.json())
 
@@ -195,6 +204,8 @@ def recipeInfo(id):
         saved_recipes = user.saved_recipes
     url = f'https://api.spoonacular.com/recipes/{id}/information?apiKey={api_key}'
     response = requests.get(url)
+    if response.status_code == 402:
+        return redirect(url_for('limitReached'))
     recipe_title = response.json()['title']
     recipe_image = response.json()['image']
     recipe_servings = response.json()['servings']
@@ -243,6 +254,8 @@ def myRecipes():
             if user.saved_recipes:
                 url = f'https://api.spoonacular.com/recipes/informationBulk?ids={user.saved_recipes[1:]}&apiKey={api_key}'
                 response = requests.get(url)
+                if response.status_code == 402:
+                    return redirect(url_for('limitReached'))
                 recipes = response.json()
                 for recipe in recipes:
                     user_recipe = {
